@@ -6,6 +6,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -16,7 +17,13 @@
             <views:AreaSettingCanvas />
         </ContentControl>
         
-        <ContentControl Grid.Column="1">
+        <GridSplitter 
+            Grid.Column="1"
+            Width="4"
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Center" />
+        
+        <ContentControl Grid.Column="2">
             <DockPanel>                
                 <StackPanel DockPanel.Dock="Top" Margin="5 5 5 10">
                     <DockPanel>
@@ -39,12 +46,18 @@
 
                     <Button DockPanel.Dock="Bottom" Margin="5 10 5 0">SaveAreaInfomation</Button>
 
-                    <TextBox DockPanel.Dock="Bottom" Margin="5 10 5 0" Height="100" />
+                    <TextBox DockPanel.Dock="Bottom" Margin="5 10 5 0" Height="100">Memo</TextBox>
                 </StackPanel>
                 
-                <StackPanel>
-
-                </StackPanel>
+                <ListBox>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <!-- (1) <StackPanel Orientation="Vertical" /> -->
+                            <!-- (2) <WrapPanel Orientation="Horizontal" /> -->
+                            <!-- (3) <Grid /> -->
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ListBox>
             </DockPanel>
         </ContentControl>
     </Grid>
