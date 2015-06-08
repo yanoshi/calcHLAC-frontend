@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace calcHLAC_frontend
+namespace Yanoshi.CalcHLACGUI
 {
     /// <summary>
     /// MainWindow.xaml の相互作用ロジック
