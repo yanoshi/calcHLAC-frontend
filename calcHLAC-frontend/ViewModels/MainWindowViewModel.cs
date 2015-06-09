@@ -8,6 +8,15 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        public MainWindowViewModel()
+        {
+            //とりあえずデバッグ用の処理を書いとくよ
+        }
 
+
+        #region プロパティ
+
+
+        #endregion
     }
 }
