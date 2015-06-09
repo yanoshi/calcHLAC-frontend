@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\OpenCvSharp-AnyCPU.2.4.10.20150604\build\OpenCvSharp-AnyCPU.props" Condition="Exists('..\packages\OpenCvSharp-AnyCPU.2.4.10.20150604\build\OpenCvSharp-AnyCPU.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -34,6 +35,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="OpenCvSharp">
+      <HintPath>..\packages\OpenCvSharp-AnyCPU.2.4.10.20150604\lib\net45\OpenCvSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenCvSharp.Blob">
+      <HintPath>..\packages\OpenCvSharp-AnyCPU.2.4.10.20150604\lib\net45\OpenCvSharp.Blob.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenCvSharp.CPlusPlus">
+      <HintPath>..\packages\OpenCvSharp-AnyCPU.2.4.10.20150604\lib\net45\OpenCvSharp.CPlusPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenCvSharp.Extensions">
+      <HintPath>..\packages\OpenCvSharp-AnyCPU.2.4.10.20150604\lib\net45\OpenCvSharp.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenCvSharp.UserInterface">
+      <HintPath>..\packages\OpenCvSharp-AnyCPU.2.4.10.20150604\lib\net45\OpenCvSharp.UserInterface.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -67,6 +83,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\PictureDatas.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\AreaSettingCanvas.xaml.cs">
       <DependentUpon>AreaSettingCanvas.xaml</DependentUpon>
     </Compile>
@@ -93,6 +112,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -102,10 +122,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="ViewModels\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
