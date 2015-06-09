@@ -3,8 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:views="clr-namespace:Yanoshi.CalcHLACGUI.Views"
         xmlns:viewModels="clr-namespace:Yanoshi.CalcHLACGUI.ViewModels"
-        DataContext="viewModels:MainWindowViewModel"
         Title="MainWindow" Height="700" Width="824">
+    <Window.DataContext>
+        <viewModels:MainWindowViewModel />
+    </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
@@ -50,8 +52,8 @@
 
                     <TextBox DockPanel.Dock="Bottom" Margin="5 10 5 0" Height="100">Memo</TextBox>
                 </StackPanel>
-                
-                <ItemsControl ItemsSource="{Binding Samples}">
+
+                <ItemsControl ItemsSource="{Binding PictureDatas}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Vertical" />
@@ -61,10 +63,10 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <DockPanel>
-                                <Image DockPanel.Dock="Left" Source="{Binding Image}" />
-                                <TextBox DockPanel.Dock="Top" Text="{Binding FileName}"/>
+                                <Image  DockPanel.Dock="Left" Source="{Binding MiniImageSource}" Width="{Binding MiniBitmap.Size.Width}" />
+                                <TextBox DockPanel.Dock="Top" Text="{Binding FileName, Mode=OneTime}" IsReadOnly="True" />
 
-                                <ItemsControl ItemsSource="{Binding Areas}">
+                                <ItemsControl ItemsSource="{Binding CalcAreas}">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <WrapPanel/>

@@ -83,7 +83,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\PictureDatas.cs" />
+    <Compile Include="Models\PictureData.cs" />
+    <Compile Include="Models\RectEx.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\AreaSettingCanvas.xaml.cs">
