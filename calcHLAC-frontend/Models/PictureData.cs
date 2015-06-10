@@ -43,6 +43,7 @@ namespace Yanoshi.CalcHLACGUI.Models
         {
             CalcAreas = new ObservableCollection<RectEx>();
             IsSeleced = false;
+            IsBinaryOutputMode = false;
         }
 
         #endregion
@@ -105,6 +106,10 @@ namespace Yanoshi.CalcHLACGUI.Models
         public String FileName { get; private set; }
 
         public bool IsSeleced { get; set; }
+
+        public bool IsBinaryOutputMode { get; set; }
+
+        public int BinaryThreshold { get; set; }
         #endregion
 
 
@@ -115,7 +120,11 @@ namespace Yanoshi.CalcHLACGUI.Models
         /// <param name="image">Matオブジェクト</param>
         private void SetImage(Mat image)
         {
-            this.Image = image;
+            var obj = new Mat(new Size(image.Width, image.Height), MatType.CV_8UC1);
+            image.ConvertTo(obj, MatType.CV_8UC1);
+
+            this.Image = obj;
+            image.Dispose();
         }
 
         /// <summary>
@@ -133,7 +142,16 @@ namespace Yanoshi.CalcHLACGUI.Models
         /// <returns></returns>
         public System.Drawing.Bitmap GetBitmap()
         {
-            return this.Image.ToBitmap();
+            if(IsBinaryOutputMode)
+            {
+                Mat output = new Mat();
+
+                Cv2.Threshold(this.Image, output, BinaryThreshold, 255, ThresholdType.Binary | ThresholdType.Otsu);
+
+                return output.ToBitmap();
+            }
+            else
+                return this.Image.ToBitmap();
         }
 
 

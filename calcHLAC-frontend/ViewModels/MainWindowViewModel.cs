@@ -132,6 +132,56 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 return new AreaSettingCanvesViewModel() { GivenPictureData = PictureDatasSelectedItem };
             }
         }
+
+
+        private int _SeparatingValue = 127;
+        /// <summary>
+        /// 二値化用のしきい値
+        /// </summary>
+        public int SeparatingValue
+        {
+            get { return _SeparatingValue; }
+            set
+            {
+                if(_SeparatingValue!=value)
+                {
+                    _SeparatingValue = value;
+
+                    foreach (var obj in PictureDatas)
+                    {
+                        obj.BinaryThreshold = value;
+                    }
+                    RaisePropertyChanged("SeparatingValue");
+                    RaisePropertyChanged("MiniImageSource");
+                    RaisePropertyChanged("PictureDatasSelectedItemVM");
+                }
+            }
+        }
+
+
+        private bool _IsShowingBinaryPict = false;
+        /// <summary>
+        /// 二値化した画像を表示するかどうか
+        /// </summary>
+        public bool IsShowingBinaryPict
+        {
+            get { return _IsShowingBinaryPict; }
+            set
+            {
+                if(_IsShowingBinaryPict != value)
+                {
+                    _IsShowingBinaryPict = value;
+                    foreach(var obj in PictureDatas)
+                    {
+                        obj.IsBinaryOutputMode = value;
+                    }
+                    RaisePropertyChanged("IsShowingBinaryPict");
+
+                    RaisePropertyChanged("MiniImageSource");
+                    RaisePropertyChanged("PictureDatasSelectedItemVM");
+                }
+            }
+        }
         #endregion
 
 
@@ -200,6 +250,49 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
         }
         #endregion
 
+
+        #region NextPictureCommand
+        private void NextPicture()
+        {
+            if(this.PictureDatasSelectedIndex - 1 < this.PictureDatas.Count)
+            {
+                this.PictureDatasSelectedIndex++;
+            }
+        }
+        private RelayCommand _NextPicture;
+        public RelayCommand NextPictureCommand
+        {
+            get
+            {
+                if (_NextPicture == null)
+                    _NextPicture = new RelayCommand(NextPicture);
+
+                return _NextPicture;
+            }
+        }
+        #endregion
+
+
+        #region PrevPictureCommand
+        private void PrevPicture()
+        {
+            if (this.PictureDatasSelectedIndex > 0)
+            {
+                this.PictureDatasSelectedIndex--;
+            }
+        }
+        private RelayCommand _PrevPicture;
+        public RelayCommand PrevPictureCommand
+        {
+            get
+            {
+                if (_PrevPicture == null)
+                    _PrevPicture = new RelayCommand(PrevPicture);
+
+                return _PrevPicture;
+            }
+        }
+        #endregion
 
         #endregion
 
