@@ -26,8 +26,6 @@ namespace Yanoshi.CalcHLACGUI.Views
         public AreaSettingCanvas()
         {
             InitializeComponent();
-
-            this.DataContextChanged += AreaSettingCanvas_DataContextChanged;
         }
 
 
@@ -35,7 +33,7 @@ namespace Yanoshi.CalcHLACGUI.Views
 
 
 
-        #region コマンド用メソッド
+        #region メソッド
 
         private void Delete()
         {
@@ -60,15 +58,11 @@ namespace Yanoshi.CalcHLACGUI.Views
 
 
         #region イベント
-        private void AreaSettingCanvas_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            ((AreaSettingCanvesViewModel)this.DataContext).DeleteCommand = new RelayCommand(Delete);
-        }
 
 
 
 
-
+        #region 領域上でのマウス関連イベント
         private bool inDrag = false;
         private double diffX;
         private double diffY;
@@ -144,9 +138,11 @@ namespace Yanoshi.CalcHLACGUI.Views
 
             nowMovingObj = null;
         }
+        #endregion
 
 
 
+        #region Grid上でのマウス関連イベント
         private bool isMouseDown = false;
         private Rectangle nowMakingObj;
         private double startX = 0, startY = 0;
@@ -224,11 +220,12 @@ namespace Yanoshi.CalcHLACGUI.Views
                 isMouseDown = true;
             }
 
-            
+
         }
-        
         #endregion
 
-       
+        #endregion
+
+
     }
 }

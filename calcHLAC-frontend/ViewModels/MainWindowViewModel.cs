@@ -18,6 +18,8 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
         public MainWindowViewModel()
         {
             //とりあえずデバッグ用の処理を書いとくよ
+
+            /*
             this.PictureDatas = new ObservableCollection<PictureData>
             {
                 new PictureData(@"C:\git\research_optics\Images\A1confocal_PFC_3nd2_normalized\00041.tif")
@@ -36,7 +38,9 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 }
             };
 
+            */
 
+            this.PictureDatas = new ObservableCollection<PictureData>();
         }
 
 

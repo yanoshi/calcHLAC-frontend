@@ -121,46 +121,6 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
             RaisePropertyChanged("CalcAreas");
         }
         #endregion
-
-
-
-        #region コマンド
-        private void DeleteKari() { }
-        private RelayCommand _Delete;
-        /// <summary>
-        /// 選択範囲を示すRectangleを削除します
-        /// </summary>
-        public RelayCommand DeleteCommand
-        {
-            get
-            {
-                if (_Delete == null)
-                    _Delete = new RelayCommand(DeleteKari);
-
-                return _Delete;
-            }
-            set
-            {
-                _Delete = value;
-                RaisePropertyChanged("DeleteCommand");
-            }
-        }
-
-
-        private void RectangleResize(RectEx obj)
-        {
-            
-        }
-        private RelayCommand<RectEx> _RectangleResize;
-        public RelayCommand<RectEx> RectangleResizeCommand
-        {
-            get
-            {
-                if (_RectangleResize == null)
-                    _RectangleResize = new RelayCommand<RectEx>(RectangleResize);
-                return _RectangleResize;
-            }
-        }
-        #endregion 
+ 
     }
 }
