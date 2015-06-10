@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using OpenCvSharp;
 using OpenCvSharp.CPlusPlus;
 using OpenCvSharp.Extensions;
+using System.Collections.ObjectModel;
 
 namespace Yanoshi.CalcHLACGUI.Models
 {
@@ -40,7 +41,7 @@ namespace Yanoshi.CalcHLACGUI.Models
         /// </summary>
         private void Init()
         {
-            CalcAreas = new List<RectEx>();
+            CalcAreas = new ObservableCollection<RectEx>();
             IsSeleced = false;
         }
 
@@ -51,7 +52,7 @@ namespace Yanoshi.CalcHLACGUI.Models
         /// <summary>
         /// HLAC演算座標を指定する
         /// </summary>
-        public List<RectEx> CalcAreas { get; set; }
+        public ObservableCollection<RectEx> CalcAreas { get; set; }
 
         public Mat Image { get; private set; }
 

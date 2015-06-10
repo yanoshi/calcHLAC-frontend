@@ -22,14 +22,14 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
             {
                 new PictureData(@"C:\git\research_optics\Images\A1confocal_PFC_3nd2_normalized\00041.tif")
                 {
-                    CalcAreas=new List<RectEx>{
+                    CalcAreas=new ObservableCollection<RectEx>{
                         new RectEx{Point=new OpenCvSharp.CPlusPlus.Point(0,0),Size=new OpenCvSharp.CPlusPlus.Size(10,10)},
-                        new RectEx{Point=new OpenCvSharp.CPlusPlus.Point(20,20),Size=new OpenCvSharp.CPlusPlus.Size(10,10)}
+                        new RectEx{Point=new OpenCvSharp.CPlusPlus.Point(100,100),Size=new OpenCvSharp.CPlusPlus.Size(100,200)}
                     }
                 },
                 new PictureData(@"C:\git\research_optics\Images\A1confocal_PFC_3nd2_normalized\00042.tif")
                 {
-                    CalcAreas=new List<RectEx>{
+                    CalcAreas=new ObservableCollection<RectEx>{
                         new RectEx{Point=new OpenCvSharp.CPlusPlus.Point(0,0),Size=new OpenCvSharp.CPlusPlus.Size(10,10)},
                         new RectEx{Point=new OpenCvSharp.CPlusPlus.Point(20,20),Size=new OpenCvSharp.CPlusPlus.Size(10,10)}
                     }

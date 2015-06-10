@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModels="clr-namespace:Yanoshi.CalcHLACGUI.ViewModels"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 
@@ -13,23 +14,52 @@
         <viewModels:AreaSettingCanvesViewModel />
     </UserControl.DataContext>
 
-    
 
 
-    <Grid Width="{Binding GivenPictureData.Image.Width}" Height="{Binding GivenPictureData.Image.Height}" MouseUp="grid_MouseUp" MouseMove="grid_MouseMove" MouseDown="grid_MouseDown" >
-       
+
+    <Grid Name="motherGrid" Width="{Binding GivenPictureData.Image.Width}" Height="{Binding GivenPictureData.Image.Height}" MouseUp="grid_MouseUp" MouseMove="grid_MouseMove" MouseDown="grid_MouseDown">
+        
         <Image Source="{Binding GivenPictureData.ImageSource}" Width="{Binding GivenPictureData.Image.Width}" />
+
+        <ItemsControl ItemsSource="{Binding GivenPictureData.CalcAreas}" >
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas>
+                        <Canvas.InputBindings>
+                            <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding DeleteCommand}" />
+                        </Canvas.InputBindings>
+                    </Canvas>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="Canvas.Left" Value="{Binding Path=X}" />
+                    <Setter Property="Canvas.Top" Value="{Binding Path=Y}" />
+                    <Setter Property="Opacity" Value="0.2" />
+                    
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Trigger.Setters>
+                                <Setter Property="Opacity" Value="0.5" />
+                            </Trigger.Setters>
+                        </Trigger>                        
+                    </Style.Triggers>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Rectangle Width="{Binding Width}" Height="{Binding Height}" Fill="{x:Static SystemColors.ControlDarkBrush}" MouseDown="rectangle_MouseDown" MouseMove="rectangle_MouseMove" MouseUp="rectangle_MouseUp" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
         <Canvas Name="mainCanves">
             <Canvas.Resources>
                 <Style TargetType="Rectangle">
                     <Setter Property="Fill" Value="{x:Static SystemColors.ControlDarkBrush}" />
-                    <Setter Property="Opacity" Value="0.2" />
-                    
+                    <Setter Property="Opacity" Value="0.5" />
                 </Style>
             </Canvas.Resources>
-            <Canvas.InputBindings>
-                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding DeleteCommand}" />
-            </Canvas.InputBindings>
         </Canvas>
     </Grid>
 </UserControl>
