@@ -73,10 +73,28 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
             }
         }
 
+
+
+        private PictureData _PictureDatasSelectedItem;
         /// <summary>
         /// PictureDatasなリストでどれが選択されているかを示す
         /// </summary>
-        public PictureData PictureDatasSelectedItem { get; set; }
+        public PictureData PictureDatasSelectedItem
+        {
+            get
+            {
+                return _PictureDatasSelectedItem;
+            }
+            set
+            {
+                if (_PictureDatasSelectedItem == value)
+                    return;
+
+                _PictureDatasSelectedItem = value;
+
+                RaisePropertyChanged("PictureDatasSelectedItem");
+            }
+        }
 
         public int PictureDatasSelectedIndex
         {
@@ -88,8 +106,10 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
             }
             set
             {
-                if (PictureDatas.Count > value)
+                if (PictureDatas.Count > value )
+                {
                     PictureDatasSelectedItem = PictureDatas[value];
+                }
             }
         }
         #endregion
@@ -125,18 +145,6 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
 
 
 
-        private void PictureDataListItemSelectChanger(PictureData item, bool state)
-        {
-            if(state)
-            {
-                item.IsSeleced = state;
-                
-            }
-            else
-            {
-
-            }
-        }
         private void PictureDataListItemSelect(object item)
         {
             if (PictureDatasSelectedItem == null)
@@ -150,6 +158,8 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 ((PictureData)item).IsSeleced = true;
                 PictureDatasSelectedItem = ((PictureData)item);
             }
+            RaisePropertyChanged("PictureDatasSelectedItem");
+
         }
         private RelayCommand<object> _PictureDataListItemSelect;
         /// <summary>

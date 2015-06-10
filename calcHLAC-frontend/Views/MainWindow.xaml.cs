@@ -13,6 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using Yanoshi.CalcHLACGUI.Models;
+using Yanoshi.CalcHLACGUI.ViewModels;
+
 namespace Yanoshi.CalcHLACGUI
 {
     /// <summary>
