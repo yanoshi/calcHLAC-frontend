@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 //OpenCV
 using OpenCvSharp;
 using OpenCvSharp.CPlusPlus;
+using OpenCvSharp.Extensions;
 
 namespace Yanoshi.CalcHLACGUI.Models
 {
@@ -61,7 +62,10 @@ namespace Yanoshi.CalcHLACGUI.Models
                 int w = 100;
                 int h = (int)((double)image.Height / ((double)image.Width / (double)w));
 
-                return new System.Drawing.Bitmap(image, new System.Drawing.Size(w, h));
+                var miniBmp = new System.Drawing.Bitmap(image, new System.Drawing.Size(w, h));
+                image.Dispose();
+
+                return miniBmp;
             }
         }
 
@@ -109,7 +113,7 @@ namespace Yanoshi.CalcHLACGUI.Models
         /// <returns></returns>
         public System.Drawing.Bitmap GetBitmap()
         {
-            return OpenCvSharp.Extensions.BitmapConverter.ToBitmap(this.Image);
+            return this.Image.ToBitmap();
         }
 
 

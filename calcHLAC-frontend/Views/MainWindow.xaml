@@ -53,31 +53,33 @@
                     <TextBox DockPanel.Dock="Bottom" Margin="5 10 5 0" Height="100">Memo</TextBox>
                 </StackPanel>
 
-                <ItemsControl ItemsSource="{Binding PictureDatas}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <DockPanel>
-                                <Image  DockPanel.Dock="Left" Source="{Binding MiniImageSource}" Width="{Binding MiniBitmap.Size.Width}" />
-                                <TextBox DockPanel.Dock="Top" Text="{Binding FileName, Mode=OneTime}" IsReadOnly="True" />
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding PictureDatas}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
 
-                                <ItemsControl ItemsSource="{Binding CalcAreas}">
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <WrapPanel/>
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
-                                </ItemsControl>
-                            </DockPanel>
-                            
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <DockPanel>
+                                    <Image  DockPanel.Dock="Left" Source="{Binding MiniImageSource}" Width="{Binding MiniBitmap.Size.Width}" />
+                                    <TextBox DockPanel.Dock="Top" Text="{Binding FileName, Mode=OneTime}" IsReadOnly="True" />
+
+                                    <ItemsControl ItemsSource="{Binding CalcAreas}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+                                </DockPanel>
+
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
             </DockPanel>
         </ContentControl>
     </Grid>

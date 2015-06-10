@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 using Yanoshi.CalcHLACGUI.Models;
 using Yanoshi.CalcHLACGUI.Common;
@@ -10,13 +11,14 @@ using Yanoshi.CalcHLACGUI.Common;
 namespace Yanoshi.CalcHLACGUI.ViewModels
 {
     using fm = System.Windows.Forms;
+    using System.Collections.ObjectModel;
 
     public class MainWindowViewModel : ViewModelBase
     {
         public MainWindowViewModel()
         {
             //とりあえずデバッグ用の処理を書いとくよ
-            this.PictureDatas = new List<PictureData>
+            this.PictureDatas = new ObservableCollection<PictureData>
             {
                 new PictureData(@"C:\git\research_optics\Images\A1confocal_PFC_3nd2_normalized\00041.tif")
                 {
@@ -38,7 +40,10 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
 
 
         #region プロパティ
-        public List<Models.PictureData> PictureDatas { get; set; }
+        /// <summary>
+        /// 画像データ群
+        /// </summary>
+        public ObservableCollection<Models.PictureData> PictureDatas { get; set; }
 
 
         private String _PictureFolderPath;
@@ -55,15 +60,23 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
             {
                 if(PictureFolderPath != value)
                 {
+                    if (!Directory.Exists(value))
+                        return;
+
                     _PictureFolderPath = value;
                     RaisePropertyChanged("PictureFolderPath");
+
+                    LoadImages(value);
+                    //RaisePropertyChanged("PictureDatas");
                 }
             }
         }
 
+
+        
         #endregion
 
-        #region コマンドたち
+        #region コマンド
 
         private void FolderSelectionDialog()
         {
@@ -89,6 +102,25 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
             }
         }
         
+        #endregion
+
+
+
+        #region メソッド
+        /// <summary>
+        /// 画像をフォルダから読み込む処理
+        /// </summary>
+        /// <param name="folderPath"></param>
+        private void LoadImages(string folderPath)
+        {
+            string[] files = Directory.GetFiles(folderPath, "*", SearchOption.AllDirectories);
+            PictureDatas.Clear();
+            
+            foreach(string fileName in files)
+            {
+                PictureDatas.Add(new PictureData(fileName));
+            }
+        }
         #endregion
     }
 }
