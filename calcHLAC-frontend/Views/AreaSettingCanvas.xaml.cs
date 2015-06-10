@@ -33,39 +33,26 @@ namespace Yanoshi.CalcHLACGUI.Views
 
         private List<Rectangle> rectList = new List<Rectangle>();
 
-        private Rectangle _NowActiveObj;
-        private Rectangle NowActiveObj
-        {
-            get
-            {
-                return _NowActiveObj;
-            }
-            set
-            {
-                if (_NowActiveObj != null)
-                    _NowActiveObj.Opacity = 0.2;
-
-                _NowActiveObj = value;
-
-                if (value != null)
-                    value.Opacity = 0.5;
-            }
-        }
 
 
         #region コマンド用メソッド
 
         private void Delete()
         {
-            if (NowActiveObj != null)
+            Yanoshi.CalcHLACGUI.Models.RectEx deleteObj = null;
+            var obj = ((AreaSettingCanvesViewModel)this.DataContext);
+            foreach (var oldRectEx in obj.GivenPictureData.CalcAreas)
             {
-                NowActiveObj.ReleaseMouseCapture();
-                this.mainCanves.Children.Remove(NowActiveObj);
-                rectList.Remove(NowActiveObj);
-                NowActiveObj = null;
-                inDrag = false;
-                isMouseDown = false;
+                if (oldRectEx.X <= obj.MouseX &&
+                    oldRectEx.Y <= obj.MouseY &&
+                    obj.MouseX < oldRectEx.X + oldRectEx.Width &&
+                    obj.MouseY < oldRectEx.Y + oldRectEx.Height)
+                {
+                    deleteObj = oldRectEx;
+                }
             }
+            if (deleteObj != null)
+                obj.GivenPictureData.CalcAreas.Remove(deleteObj);
         }
         #endregion
 
@@ -90,6 +77,12 @@ namespace Yanoshi.CalcHLACGUI.Views
         private Rectangle nowMovingObj;
         private void rectangle_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if(e.ClickCount == 2)
+            {
+                Delete();
+                return;
+            }
+
             inDrag = true;
 
             var obj = ((AreaSettingCanvesViewModel)this.DataContext);
@@ -172,7 +165,7 @@ namespace Yanoshi.CalcHLACGUI.Views
                 this.mainCanves.Children.Remove(nowMakingObj);
                 nowMakingObj.ReleaseMouseCapture();
 
-                if (!(w < 0 || h < 0))
+                if (!(w <= 0 || h <= 0))
                 {
                     //オブジェクト作成処理
                     obj.GivenPictureData.CalcAreas.Add(new Models.RectEx((int)startX, (int)startY, (int)w, (int)h));

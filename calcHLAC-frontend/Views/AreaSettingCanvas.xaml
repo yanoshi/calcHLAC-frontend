@@ -24,11 +24,7 @@
         <ItemsControl ItemsSource="{Binding GivenPictureData.CalcAreas}" >
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Canvas>
-                        <Canvas.InputBindings>
-                            <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding DeleteCommand}" />
-                        </Canvas.InputBindings>
-                    </Canvas>
+                    <Canvas />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemContainerStyle>
