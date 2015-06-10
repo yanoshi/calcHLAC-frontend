@@ -32,8 +32,8 @@
                 <StackPanel DockPanel.Dock="Top" Margin="5 5 5 10">
                     <DockPanel>
                         <Label DockPanel.Dock="Left">フォルダ名:</Label>
-                        <Button DockPanel.Dock="Right" Width="30px">開く</Button>
-                        <TextBox></TextBox>
+                        <Button DockPanel.Dock="Right" Width="30px" Command="{Binding FolderSelectionDialogCommand}">開く</Button>
+                        <TextBox Text="{Binding PictureFolderPath}" />
                     </DockPanel>
 
                     <DockPanel>

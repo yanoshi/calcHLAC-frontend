@@ -5,9 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Yanoshi.CalcHLACGUI.Models;
+using Yanoshi.CalcHLACGUI.Common;
 
 namespace Yanoshi.CalcHLACGUI.ViewModels
 {
+    using fm = System.Windows.Forms;
+
     public class MainWindowViewModel : ViewModelBase
     {
         public MainWindowViewModel()
@@ -36,6 +39,56 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
 
         #region プロパティ
         public List<Models.PictureData> PictureDatas { get; set; }
+
+
+        private String _PictureFolderPath;
+        /// <summary>
+        /// 画像が格納されているフォルダパスの情報を格納するプロパティ
+        /// </summary>
+        public String PictureFolderPath 
+        { 
+            get
+            {
+                return _PictureFolderPath;
+            }
+            set
+            {
+                if(PictureFolderPath != value)
+                {
+                    _PictureFolderPath = value;
+                    RaisePropertyChanged("PictureFolderPath");
+                }
+            }
+        }
+
+        #endregion
+
+        #region コマンドたち
+
+        private void FolderSelectionDialog()
+        {
+            using (var diag = new fm.FolderBrowserDialog())
+            {
+                diag.SelectedPath = this.PictureFolderPath;
+                var result = diag.ShowDialog();
+                if (result == fm.DialogResult.OK)
+                    PictureFolderPath = diag.SelectedPath;
+            }
+        }
+        private RelayCommand _FolderSelectionDialog;
+        /// <summary>
+        /// フォルダを開くためのコマンド
+        /// </summary>
+        public RelayCommand FolderSelectionDialogCommand
+        {
+            get
+            {
+                if (_FolderSelectionDialog == null)
+                    _FolderSelectionDialog = new RelayCommand(FolderSelectionDialog);
+                return _FolderSelectionDialog;
+            }
+        }
+        
         #endregion
     }
 }
