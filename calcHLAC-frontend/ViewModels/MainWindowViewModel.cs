@@ -93,9 +93,13 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 _PictureDatasSelectedItem = value;
 
                 RaisePropertyChanged("PictureDatasSelectedItem");
+                RaisePropertyChanged("PictureDatasSelectedItemVM");
             }
         }
 
+        /// <summary>
+        /// PictureDatasなリストで選択状態にあるやつのインデックス値を返す
+        /// </summary>
         public int PictureDatasSelectedIndex
         {
             get
@@ -112,7 +116,23 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 }
             }
         }
+
+
+        /// <summary>
+        /// DataContextに指定するためのPictureDatasSelectedItem
+        /// </summary>
+        public AreaSettingCanvesViewModel PictureDatasSelectedItemVM
+        {
+            get
+            {
+                return new AreaSettingCanvesViewModel() { GivenPictureData = PictureDatasSelectedItem };
+            }
+        }
         #endregion
+
+
+
+
 
         #region コマンド
 
@@ -144,7 +164,7 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
         #endregion
 
 
-
+        #region PictureDataListItemSelectCommand
         private void PictureDataListItemSelect(object item)
         {
             if (PictureDatasSelectedItem == null)
@@ -174,9 +194,14 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 return _PictureDataListItemSelect;
             }
         }
+        #endregion
 
 
         #endregion
+
+
+
+
 
 
 

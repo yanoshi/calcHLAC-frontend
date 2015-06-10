@@ -22,7 +22,7 @@
         </Grid.RowDefinitions>
 
         <ContentControl Grid.Column="0">
-            <views:AreaSettingCanvas />
+            <views:AreaSettingCanvas DataContext="{Binding PictureDatasSelectedItemVM}" />
         </ContentControl>
         
         <GridSplitter 

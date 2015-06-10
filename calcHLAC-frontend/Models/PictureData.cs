@@ -85,6 +85,22 @@ namespace Yanoshi.CalcHLACGUI.Models
             }
         }
 
+
+        public object ImageSource
+        {
+            get
+            {
+                var bmp = GetBitmap();
+
+
+                return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                    bmp.GetHbitmap(),
+                    IntPtr.Zero,
+                    System.Windows.Int32Rect.Empty,
+                    BitmapSizeOptions.FromWidthAndHeight(bmp.Width, bmp.Height));
+            }
+        }
+
         public String FileName { get; private set; }
 
         public bool IsSeleced { get; set; }
