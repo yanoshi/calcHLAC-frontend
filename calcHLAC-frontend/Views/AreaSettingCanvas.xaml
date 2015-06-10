@@ -10,9 +10,10 @@
     <UserControl.DataContext>
         <viewModels:AreaSettingCanvesViewModel />
     </UserControl.DataContext>
+    
 
-    <Grid Width="{Binding GivenPictureData.Image.Width}" Height="{Binding GivenPictureData.Image.Height}" >
-        <Canvas Name="mainCanves"></Canvas>
+    <Grid Width="{Binding GivenPictureData.Image.Width}" Height="{Binding GivenPictureData.Image.Height}" MouseUp="grid_MouseUp" MouseMove="grid_MouseMove" MouseDown="grid_MouseDown" >
         <Image Source="{Binding GivenPictureData.ImageSource}" Width="{Binding GivenPictureData.Image.Width}" />
+        <Canvas Name="mainCanves"></Canvas>
     </Grid>
 </UserControl>
