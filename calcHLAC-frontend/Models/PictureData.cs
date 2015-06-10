@@ -41,6 +41,7 @@ namespace Yanoshi.CalcHLACGUI.Models
         private void Init()
         {
             CalcAreas = new List<RectEx>();
+            IsSeleced = false;
         }
 
         #endregion
@@ -85,6 +86,8 @@ namespace Yanoshi.CalcHLACGUI.Models
         }
 
         public String FileName { get; private set; }
+
+        public bool IsSeleced { get; set; }
         #endregion
 
 

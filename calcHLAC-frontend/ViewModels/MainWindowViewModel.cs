@@ -36,6 +36,7 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 }
             };
 
+
         }
 
 
@@ -72,12 +73,31 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
             }
         }
 
+        /// <summary>
+        /// PictureDatasなリストでどれが選択されているかを示す
+        /// </summary>
+        public PictureData PictureDatasSelectedItem { get; set; }
 
-        
+        public int PictureDatasSelectedIndex
+        {
+            get
+            {
+                if (PictureDatasSelectedItem == null)
+                    return -1;
+                return PictureDatas.IndexOf(PictureDatasSelectedItem);
+            }
+            set
+            {
+                if (PictureDatas.Count > value)
+                    PictureDatasSelectedItem = PictureDatas[value];
+            }
+        }
         #endregion
 
         #region コマンド
 
+
+        #region FolderSelectionDialogCommand
         private void FolderSelectionDialog()
         {
             using (var diag = new fm.FolderBrowserDialog())
@@ -101,7 +121,51 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 return _FolderSelectionDialog;
             }
         }
-        
+        #endregion
+
+
+
+        private void PictureDataListItemSelectChanger(PictureData item, bool state)
+        {
+            if(state)
+            {
+                item.IsSeleced = state;
+                
+            }
+            else
+            {
+
+            }
+        }
+        private void PictureDataListItemSelect(object item)
+        {
+            if (PictureDatasSelectedItem == null)
+            {
+                PictureDatasSelectedItem = ((PictureData)item);
+                PictureDatasSelectedItem.IsSeleced = true;
+            }
+            else if((PictureData)item != PictureDatasSelectedItem)
+            {
+                PictureDatasSelectedItem.IsSeleced = false;
+                ((PictureData)item).IsSeleced = true;
+                PictureDatasSelectedItem = ((PictureData)item);
+            }
+        }
+        private RelayCommand<object> _PictureDataListItemSelect;
+        /// <summary>
+        /// PictureDatasなリストの要素を選択した際に発生する
+        /// </summary>
+        public RelayCommand<object> PictureDataListItemSelectCommand
+        {
+            get
+            {
+                if (_PictureDataListItemSelect == null)
+                    _PictureDataListItemSelect = new RelayCommand<object>(PictureDataListItemSelect);
+                return _PictureDataListItemSelect;
+            }
+        }
+
+
         #endregion
 
 

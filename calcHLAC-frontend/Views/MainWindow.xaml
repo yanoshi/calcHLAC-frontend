@@ -3,10 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:views="clr-namespace:Yanoshi.CalcHLACGUI.Views"
         xmlns:viewModels="clr-namespace:Yanoshi.CalcHLACGUI.ViewModels"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         Title="MainWindow" Height="700" Width="824">
     <Window.DataContext>
         <viewModels:MainWindowViewModel />
     </Window.DataContext>
+    <Window.Resources>
+        <viewModels:MainWindowViewModel x:Key="ParentViewModel" />
+    </Window.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
@@ -55,32 +60,39 @@
 
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding PictureDatas}">
-                        <ItemsControl.Resources>
-                            <Style x:Key="DockPanelDesign" TargetType="{x:Type Border}">
-                                <Setter Property="CornerRadius" Value="0" />
-                                <Setter Property="Padding" Value="5" />
-                                <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkBrush}" />
-                                <Setter Property="BorderThickness" Value="0 0 0 1" />
-                                <Setter Property="Background" Value="{x:Static SystemColors.WindowBrush}" />
-                                
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Opacity" Value="0.5" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ItemsControl.Resources>
                         
                         
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel Orientation="Vertical" />
                             </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-
+                        </ItemsControl.ItemsPanel> 
+                        
+                        
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
+                                <DataTemplate.Resources>
+                                    <SolidColorBrush x:Key="BackGroundBrush" Color="{x:Static SystemColors.WindowColor}"  />
+
+                                    <Style x:Key="DockPanelDesign" TargetType="{x:Type Border}">
+                                        <Setter Property="CornerRadius" Value="0" />
+                                        <Setter Property="Padding" Value="5" />
+                                        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ControlDarkBrush}" />
+                                        <Setter Property="BorderThickness" Value="0 0 0 1" />
+                                        <Setter Property="Background" Value="{DynamicResource BackGroundBrush}" />
+
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Opacity" Value="0.5" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataTemplate.Resources>
+                                
                                 <Border Style="{StaticResource DockPanelDesign}">
+                                    <Border.InputBindings>
+                                        <MouseBinding Gesture="LeftClick"  Command="{Binding Source={StaticResource ParentViewModel}, Path=PictureDataListItemSelectCommand}" CommandParameter="{Binding}" />
+                                    </Border.InputBindings>
                                     <DockPanel>
                                         <Image  DockPanel.Dock="Left" Source="{Binding MiniImageSource}" Width="{Binding MiniBitmap.Size.Width}" />
                                         <TextBox DockPanel.Dock="Top" Text="{Binding FileName, Mode=OneTime}" IsReadOnly="True" />
@@ -91,6 +103,7 @@
                                                     <WrapPanel/>
                                                 </ItemsPanelTemplate>
                                             </ItemsControl.ItemsPanel>
+                                            
                                         </ItemsControl>
                                     </DockPanel>
                                 </Border>
