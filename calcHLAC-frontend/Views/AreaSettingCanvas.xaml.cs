@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using Yanoshi.CalcHLACGUI.ViewModels;
+using Yanoshi.CalcHLACGUI.Common;
 
 namespace Yanoshi.CalcHLACGUI.Views
 {
@@ -25,8 +26,11 @@ namespace Yanoshi.CalcHLACGUI.Views
         public AreaSettingCanvas()
         {
             InitializeComponent();
+
+            this.DataContextChanged += AreaSettingCanvas_DataContextChanged;
         }
 
+        
         private List<Rectangle> rectList = new List<Rectangle>();
 
         private Rectangle _NowActiveObj;
@@ -40,20 +44,44 @@ namespace Yanoshi.CalcHLACGUI.Views
             {
                 if (_NowActiveObj != null)
                     _NowActiveObj.Opacity = 0.2;
+                
                 _NowActiveObj = value;
-                value.Opacity = 0.5;
+
+                if (value != null)
+                    value.Opacity = 0.5;
             }
         }
 
 
-        #region コマンド
+        #region コマンド用メソッド
 
+        private void Delete()
+        {
+            if(NowActiveObj != null)
+            {
+                NowActiveObj.ReleaseMouseCapture();
+                this.mainCanves.Children.Remove(NowActiveObj);
+                rectList.Remove(NowActiveObj);
+                NowActiveObj = null;
+                inDrag = false;
+                isMouseDown = false;
+            }
+        } 
         #endregion
 
 
 
 
         #region イベント
+        private void AreaSettingCanvas_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            ((AreaSettingCanvesViewModel)this.DataContext).DeleteCommand = new RelayCommand(Delete);
+        }
+
+
+
+
+
         private bool inDrag = false;
         private double diffX;
         private double diffY;

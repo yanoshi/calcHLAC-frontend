@@ -8,6 +8,8 @@ using System.Windows.Input;
 using Yanoshi.CalcHLACGUI.Models;
 using Yanoshi.CalcHLACGUI.ViewModels;
 
+using Yanoshi.CalcHLACGUI.Common;
+
 namespace Yanoshi.CalcHLACGUI.ViewModels
 {
     public class AreaSettingCanvesViewModel : ViewModelBase
@@ -36,10 +38,36 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 }
             }
         }
+
+
+
+
         #endregion
 
 
 
-        
+        #region コマンド
+        private void DeleteKari() { }
+        private RelayCommand _Delete;
+        /// <summary>
+        /// 選択範囲を示すRectangleを削除します
+        /// </summary>
+        public RelayCommand DeleteCommand
+        {
+            get
+            {
+                if (_Delete == null)
+                    _Delete = new RelayCommand(DeleteKari);
+
+                return _Delete;
+            }
+            set
+            {
+                _Delete = value;
+                RaisePropertyChanged("DeleteCommand");
+            }
+        }
+
+        #endregion 
     }
 }
