@@ -11,9 +11,18 @@
         <viewModels:AreaSettingCanvesViewModel />
     </UserControl.DataContext>
     
+    
 
     <Grid Width="{Binding GivenPictureData.Image.Width}" Height="{Binding GivenPictureData.Image.Height}" MouseUp="grid_MouseUp" MouseMove="grid_MouseMove" MouseDown="grid_MouseDown" >
         <Image Source="{Binding GivenPictureData.ImageSource}" Width="{Binding GivenPictureData.Image.Width}" />
-        <Canvas Name="mainCanves"></Canvas>
+        <Canvas Name="mainCanves">
+            <Canvas.Resources>
+                <Style TargetType="Rectangle">
+                    <Setter Property="Fill" Value="{x:Static SystemColors.ControlDarkBrush}" />
+                    <Setter Property="Opacity" Value="0.2" />
+                </Style>
+            </Canvas.Resources>
+            
+        </Canvas>
     </Grid>
 </UserControl>

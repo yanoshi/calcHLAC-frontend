@@ -29,6 +29,29 @@ namespace Yanoshi.CalcHLACGUI.Views
 
         private List<Rectangle> rectList = new List<Rectangle>();
 
+        private Rectangle _NowActiveObj;
+        private Rectangle NowActiveObj
+        {
+            get
+            {
+                return _NowActiveObj;
+            }
+            set
+            {
+                if (_NowActiveObj != null)
+                    _NowActiveObj.Opacity = 0.2;
+                _NowActiveObj = value;
+                value.Opacity = 0.5;
+            }
+        }
+
+
+        #region コマンド
+
+        #endregion
+
+
+
 
         #region イベント
         private bool inDrag = false;
@@ -41,6 +64,7 @@ namespace Yanoshi.CalcHLACGUI.Views
             diffX = point.X - Canvas.GetLeft((Rectangle)sender);
             diffY = point.Y - Canvas.GetTop((Rectangle)sender);
             ((Rectangle)sender).CaptureMouse();
+            NowActiveObj = (Rectangle)sender;
         }
         private void rectangle_MouseMove(object sender, MouseEventArgs e)
         {
@@ -63,7 +87,7 @@ namespace Yanoshi.CalcHLACGUI.Views
 
 
         private bool isMouseDown = false;
-        private Rectangle nowActiveObj;
+        private Rectangle nowMakingObj;
         private double startX = 0, startY = 0;
         private void grid_MouseUp(object sender, MouseButtonEventArgs e)
         {
@@ -75,8 +99,17 @@ namespace Yanoshi.CalcHLACGUI.Views
 
                 if (w < 0 || h < 0)
                 {
-                    this.mainCanves.Children.Remove(nowActiveObj);
-                    nowActiveObj.ReleaseMouseCapture();
+                    this.mainCanves.Children.Remove(nowMakingObj);
+                    nowMakingObj.ReleaseMouseCapture();
+                }
+                else
+                {
+                    nowMakingObj.MouseDown += rectangle_MouseDown;
+                    nowMakingObj.MouseMove += rectangle_MouseMove;
+                    nowMakingObj.MouseUp += rectangle_MouseUp;
+                    rectList.Add(nowMakingObj);
+
+                    NowActiveObj = nowMakingObj;
                 }
 
                 isMouseDown = false;
@@ -95,8 +128,8 @@ namespace Yanoshi.CalcHLACGUI.Views
                 if (w < 0 || h < 0)
                     return;
 
-                nowActiveObj.Width=w;
-                nowActiveObj.Height=h;
+                nowMakingObj.Width=w;
+                nowMakingObj.Height=h;
             }
         }
 
@@ -108,9 +141,6 @@ namespace Yanoshi.CalcHLACGUI.Views
 
                 Rectangle rect = new Rectangle();
                 rectList.Add(rect);
-
-                rect.Fill=Brushes.Green;
-                
                 
                 Canvas.SetLeft(rect, pos.X);
                 Canvas.SetTop(rect, pos.Y);
@@ -121,7 +151,7 @@ namespace Yanoshi.CalcHLACGUI.Views
                 startX = pos.X;
                 startY = pos.Y;
 
-                nowActiveObj = rect;
+                nowMakingObj = rect;
 
                 isMouseDown = true;
             }
