@@ -104,10 +104,13 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Calculator\HLACCalculator.cs" />
+    <Compile Include="Common\MatExtensions.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\StaticMethods.cs" />
     <Compile Include="Models\PictureData.cs" />
     <Compile Include="Models\PictureDataBase.cs" />
+    <Compile Include="Models\RectAndFeature.cs" />
     <Compile Include="Models\RectEx.cs" />
     <Compile Include="Models\SettingsForSave.cs" />
     <Compile Include="ViewModels\AreaSettingCanvesViewModel.cs" />

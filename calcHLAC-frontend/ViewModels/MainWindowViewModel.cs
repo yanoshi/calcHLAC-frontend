@@ -7,6 +7,7 @@ using System.IO;
 
 using Yanoshi.CalcHLACGUI.Models;
 using Yanoshi.CalcHLACGUI.Common;
+using Yanoshi.CalcHLACGUI.Calculator;
 
 namespace Yanoshi.CalcHLACGUI.ViewModels
 {
@@ -45,12 +46,16 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
 
 
         #region プロパティ
+
+        #region PictureDatas
         /// <summary>
         /// 画像データ群
         /// </summary>
         public ObservableCollection<Models.PictureData> PictureDatas { get; set; }
+        #endregion
 
 
+        #region PictureFolderPath
         private String _PictureFolderPath;
         /// <summary>
         /// 画像が格納されているフォルダパスの情報を格納するプロパティ
@@ -76,9 +81,10 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 }
             }
         }
+        #endregion
 
 
-
+        #region PictureDatasSelectedItem
         private PictureData _PictureDatasSelectedItem;
         /// <summary>
         /// PictureDatasなリストでどれが選択されているかを示す
@@ -100,7 +106,10 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 RaisePropertyChanged("PictureDatasSelectedItemVM");
             }
         }
+        #endregion
 
+
+        #region PictureDatasSelectedIndex
         /// <summary>
         /// PictureDatasなリストで選択状態にあるやつのインデックス値を返す
         /// </summary>
@@ -120,8 +129,10 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 }
             }
         }
+        #endregion
 
 
+        #region PictureDatasSelectedItemVM
         /// <summary>
         /// DataContextに指定するためのPictureDatasSelectedItem
         /// </summary>
@@ -132,8 +143,10 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 return new AreaSettingCanvesViewModel() { GivenPictureData = PictureDatasSelectedItem };
             }
         }
+        #endregion
 
 
+        #region SeparatingValue
         private int _SeparatingValue = 127;
         /// <summary>
         /// 二値化用のしきい値
@@ -156,8 +169,10 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 }
             }
         }
+        #endregion
 
 
+        #region IsShowingBinaryPict
         private bool _IsShowingBinaryPict = false;
         /// <summary>
         /// 二値化した画像を表示するかどうか
@@ -179,9 +194,10 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 }
             }
         }
+        #endregion
 
 
-
+        #region UsingOtsuMethod
         private bool _UsingOtsuMethod = false;
         /// <summary>
         /// 大津らの手法を利用して2値化を行うかどうか
@@ -203,6 +219,55 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 }
             }
         }
+        #endregion
+
+
+        #region StepSizeStr
+        private string _StepSizeStr = "1";
+        public string StepSizeStr
+        {
+            get { return _StepSizeStr; }
+            set
+            {
+                if(_StepSizeStr != value)
+                {
+                    _StepSizeStr = value;
+                    
+                    List<int> intList = new List<int>();
+                    try
+                    {
+                        string[] steps = value.Split(',');
+                        foreach (string str in steps)
+                        {
+                            intList.Add(int.Parse(str));
+                        }
+                        _StepSize = intList.ToArray();
+                    }
+                    catch(Exception e)
+                    {
+                        System.Diagnostics.Debug.WriteLine(e.ToString());
+                    }
+
+                    RaisePropertyChanged("StepSizeStr");
+                }
+            }
+        }
+        #endregion
+
+
+        #region StepSize
+        private int[] _StepSize;
+        public int[] StepSize
+        {
+            get
+            {
+                if (_StepSize == null)
+                    _StepSize = new int[] {1 };
+                return _StepSize;
+            }
+            set { _StepSize = value; }
+        }
+        #endregion
 
         #endregion
 
@@ -398,7 +463,53 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
             }
         }
         #endregion
-        
+
+
+        #region CalcHLACCommand
+        private void CalcHLAC()
+        {
+            string fileName;
+
+            using (var diag = new fm.SaveFileDialog())
+            {
+                diag.Filter = "CSVファイル|*.csv";
+                var result = diag.ShowDialog();
+                if (result == fm.DialogResult.OK)
+                    fileName = diag.FileName;
+                else
+                    return;
+            }
+
+
+            StringBuilder strBuilder = new StringBuilder();
+
+            foreach(var obj in PictureDatas)
+            { 
+                foreach(var rect in obj.CalcAreas)
+                {
+                    RectAndFeature features;
+                    features = HLACCalculator.GetFeatures(obj.GetBinaryMat(), rect, StepSize);
+                    strBuilder.AppendLine(string.Join(",", features.Features));
+                }
+            }
+
+            StreamWriter stw = new StreamWriter(fileName);
+            stw.Write(strBuilder.ToString());
+            stw.Close();
+            
+        }
+        private RelayCommand _CalcHLAC;
+        public RelayCommand CalcHLACCommand
+        {
+            get
+            {
+                if (_CalcHLAC == null)
+                    _CalcHLAC = new RelayCommand(CalcHLAC);
+
+                return _CalcHLAC;
+            }
+        }
+        #endregion
 
         #endregion
 

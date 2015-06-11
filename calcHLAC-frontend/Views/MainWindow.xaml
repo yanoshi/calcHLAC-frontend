@@ -39,13 +39,13 @@
         <ContentControl Grid.Column="2">
             <DockPanel>                
                 <StackPanel DockPanel.Dock="Top" Margin="5 5 5 10">
-                    <DockPanel>
+                    <DockPanel Margin="5">
                         <Label DockPanel.Dock="Left">フォルダ名:</Label>
                         <Button DockPanel.Dock="Right" Width="30px" Command="{Binding FolderSelectionDialogCommand}">開く</Button>
                         <TextBox Text="{Binding PictureFolderPath}" />
                     </DockPanel>
 
-                    <DockPanel>
+                    <DockPanel Margin="5">
                         <Label DockPanel.Dock="Left">2値化しきい値: </Label>
                         <TextBox DockPanel.Dock="Right" Width="30px" Text="{Binding SeparatingValue}" />
                         <Slider Value="{Binding SeparatingValue}" Maximum="255" Minimum="0" />
@@ -62,14 +62,19 @@
                             <TextBlock>二値化した画像を表示する</TextBlock>
                         </CheckBox>
                     </DockPanel>
-
-                    <Button DockPanel.Dock="Bottom" Margin="5 10 5 0">Calc</Button>
-
+                                        
                     <Button DockPanel.Dock="Bottom" Margin="5 10 5 0" Command="{Binding LoadAllSettingsCommand}">Load</Button>
 
                     <Button DockPanel.Dock="Bottom" Margin="5 10 5 0" Command="{Binding SaveAllSettingsCommand}">SaveSetting</Button>
 
                     <Button DockPanel.Dock="Bottom" Margin="5 10 5 0">SaveAreaInfomation</Button>
+
+                    <DockPanel Margin="5 5 5 0">
+                        <Label DockPanel.Dock="Left">StepSize(カンマ区切り):</Label>
+                        <TextBox Text="{Binding StepSizeStr}" />
+                    </DockPanel>
+
+                    <Button DockPanel.Dock="Bottom" Margin="5 10 5 0" Command="{Binding CalcHLACCommand}">Calc</Button>
 
                     <TextBox DockPanel.Dock="Bottom" Margin="5 10 5 0" Height="100">Memo</TextBox>
                 </StackPanel>

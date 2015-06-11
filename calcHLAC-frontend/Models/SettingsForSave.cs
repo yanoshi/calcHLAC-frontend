@@ -18,6 +18,7 @@ namespace Yanoshi.CalcHLACGUI.Models
         public int SeparatingValue { get; set; }
         public bool IsShowingBinaryPict { get; set; }
         public bool UsingOtsuMethod { get; set; }
+        public int[] StepSizes { get; set; }
 
 
         public SettingsForSave(ObservableCollection<PictureData> pictureDatas)

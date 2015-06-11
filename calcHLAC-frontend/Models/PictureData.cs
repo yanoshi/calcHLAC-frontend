@@ -91,6 +91,7 @@ namespace Yanoshi.CalcHLACGUI.Models
             {
                 var bmp = GetBitmap();
 
+                GC.Collect();
 
                 return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
                     bmp.GetHbitmap(),
@@ -150,9 +151,22 @@ namespace Yanoshi.CalcHLACGUI.Models
         }
 
 
-        
+        /// <summary>
+        /// 二値化したMatを返す
+        /// </summary>
+        /// <returns></returns>
+        public Mat GetBinaryMat()
+        {
+            Mat output = new Mat();
+
+
+            if (UsingOtsuMethod)
+                Cv2.Threshold(this.Image, output, 0, 255, ThresholdType.Binary | ThresholdType.Otsu);
+            else
+                Cv2.Threshold(this.Image, output, BinaryThreshold, 255, ThresholdType.Binary);
+
+            return output;
+        }
         #endregion
-
-
     }
 }
