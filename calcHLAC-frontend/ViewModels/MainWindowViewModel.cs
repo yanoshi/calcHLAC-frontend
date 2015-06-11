@@ -316,6 +316,50 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
         }
         #endregion
 
+
+        #region SaveAllSettingsCommand
+        private void SaveAllSettings()
+        {
+            //設定の保存をするぞい
+            //バイナリも含んでいるので、バイナリシリアル化
+            string fileName;
+
+            using (var diag = new fm.SaveFileDialog())
+            {
+                diag.Filter = "全てのファイル|*";
+                var result = diag.ShowDialog();
+                if (result == fm.DialogResult.OK)
+                    fileName = diag.FileName;
+                else
+                    return;
+            }
+
+
+            List<PictureDataBase> pictListForSave = new List<PictureDataBase>();
+
+            foreach(var obj in PictureDatas)
+            {
+                PictureDataBase saveObj = (PictureDataBase)obj;
+                saveObj.RunSettingForSaving();
+                pictListForSave.Add(saveObj);
+            }
+
+            StaticMethods.SaveToBinaryFile(fileName, pictListForSave);
+
+        }
+        private RelayCommand _SaveAllSettings;
+        public RelayCommand SaveAllSettingsCommand
+        {
+            get
+            {
+                if (_SaveAllSettings == null)
+                    _SaveAllSettings = new RelayCommand(SaveAllSettings);
+
+                return _SaveAllSettings;
+            }
+        }
+        #endregion
+
         #endregion
 
 
