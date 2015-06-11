@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using OpenCvSharp;
 using OpenCvSharp.CPlusPlus;
 using OpenCvSharp.Extensions;
+using System.Collections.ObjectModel;
 
 namespace Yanoshi.CalcHLACGUI.Models
 {
@@ -40,8 +41,9 @@ namespace Yanoshi.CalcHLACGUI.Models
         /// </summary>
         private void Init()
         {
-            CalcAreas = new List<RectEx>();
+            CalcAreas = new ObservableCollection<RectEx>();
             IsSeleced = false;
+            IsBinaryOutputMode = false;
         }
 
         #endregion
@@ -51,7 +53,7 @@ namespace Yanoshi.CalcHLACGUI.Models
         /// <summary>
         /// HLAC演算座標を指定する
         /// </summary>
-        public List<RectEx> CalcAreas { get; set; }
+        public ObservableCollection<RectEx> CalcAreas { get; set; }
 
         public Mat Image { get; private set; }
 
@@ -85,9 +87,31 @@ namespace Yanoshi.CalcHLACGUI.Models
             }
         }
 
+
+        public object ImageSource
+        {
+            get
+            {
+                var bmp = GetBitmap();
+
+
+                return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                    bmp.GetHbitmap(),
+                    IntPtr.Zero,
+                    System.Windows.Int32Rect.Empty,
+                    BitmapSizeOptions.FromWidthAndHeight(bmp.Width, bmp.Height));
+            }
+        }
+
         public String FileName { get; private set; }
 
         public bool IsSeleced { get; set; }
+
+        public bool IsBinaryOutputMode { get; set; }
+
+        public int BinaryThreshold { get; set; }
+
+        public bool UsingOtsuMethod { get; set; }
         #endregion
 
 
@@ -98,7 +122,12 @@ namespace Yanoshi.CalcHLACGUI.Models
         /// <param name="image">Matオブジェクト</param>
         private void SetImage(Mat image)
         {
-            this.Image = image;
+            var obj = new Mat();
+
+            Cv2.CvtColor(image, obj, ColorConversion.RgbaToGray);
+
+            this.Image = obj;
+            image.Dispose();
         }
 
         /// <summary>
@@ -116,7 +145,20 @@ namespace Yanoshi.CalcHLACGUI.Models
         /// <returns></returns>
         public System.Drawing.Bitmap GetBitmap()
         {
-            return this.Image.ToBitmap();
+            if(IsBinaryOutputMode)
+            {
+                Mat output = new Mat();
+                
+
+                if(UsingOtsuMethod)
+                    Cv2.Threshold(this.Image, output, 0, 255, ThresholdType.Binary | ThresholdType.Otsu);
+                else
+                    Cv2.Threshold(this.Image, output, BinaryThreshold, 255, ThresholdType.Binary);
+
+                return output.ToBitmap();
+            }
+            else
+                return this.Image.ToBitmap();
         }
 
 

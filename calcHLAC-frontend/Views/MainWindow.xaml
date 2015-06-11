@@ -10,6 +10,11 @@
     <Window.Resources>
         <viewModels:MainWindowViewModel x:Key="ParentViewModel" />
     </Window.Resources>
+    
+    <Window.InputBindings>
+        <KeyBinding Key="Right" Command="{Binding NextPictureCommand}"/>
+        <KeyBinding Key="Left" Command="{Binding PrevPictureCommand}"/>
+    </Window.InputBindings>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -22,7 +27,7 @@
         </Grid.RowDefinitions>
 
         <ContentControl Grid.Column="0">
-            <views:AreaSettingCanvas />
+            <views:AreaSettingCanvas DataContext="{Binding PictureDatasSelectedItemVM}" />
         </ContentControl>
         
         <GridSplitter 
@@ -42,8 +47,20 @@
 
                     <DockPanel>
                         <Label DockPanel.Dock="Left">2値化しきい値: </Label>
-                        <TextBox DockPanel.Dock="Right" Width="30px" />
-                        <Slider />
+                        <TextBox DockPanel.Dock="Right" Width="30px" Text="{Binding SeparatingValue}" />
+                        <Slider Value="{Binding SeparatingValue}" Maximum="255" Minimum="0" />
+                    </DockPanel>
+
+                    <DockPanel>
+                        <CheckBox IsChecked="{Binding UsingOtsuMethod}">
+                            <TextBlock>大津らの手法を利用してグレースケールかする(しきい値は無効化)</TextBlock>
+                        </CheckBox>
+                    </DockPanel>
+
+                    <DockPanel>
+                        <CheckBox IsChecked="{Binding IsShowingBinaryPict}">
+                            <TextBlock>二値化した画像を表示する</TextBlock>
+                        </CheckBox>
                     </DockPanel>
 
                     <Button DockPanel.Dock="Bottom" Margin="5 10 5 0">Calc</Button>
@@ -99,7 +116,11 @@
                                                 <WrapPanel/>
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
-                                        
+                                        <ItemsControl.ItemContainerStyle>
+                                            <Style TargetType="ContentPresenter">
+                                                <Setter Property="Margin" Value="3" />
+                                            </Style>
+                                        </ItemsControl.ItemContainerStyle>
                                     </ItemsControl>
                                 </DockPanel>
                             </Border>

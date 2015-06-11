@@ -11,7 +11,7 @@ namespace Yanoshi.CalcHLACGUI.Models
     /// <summary>
     /// 領域情報を適当に扱うための構造体
     /// </summary>
-    public struct RectEx
+    public class RectEx
     {
         #region メンバ変数
         private int width, height, x, y;
@@ -27,6 +27,16 @@ namespace Yanoshi.CalcHLACGUI.Models
             SetPoint(p);
             SetSize(s);
         }
+
+        public RectEx(int x,int y,int width,int height)
+        {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+        }
+
+        public RectEx() { }
 
         public Size Size 
         {
@@ -69,6 +79,36 @@ namespace Yanoshi.CalcHLACGUI.Models
         {
             x = p.X;
             y = p.Y;
+        }
+
+
+        public int Width
+        {
+            get { return width; }
+            set { width = value; }
+        }
+
+        public int Height
+        {
+            get { return height; }
+            set { height = value; }
+        }
+
+        public int X
+        {
+            get { return x; }
+            set { x = value; }
+        }
+
+        public int Y
+        {
+            get { return y; }
+            set { y = value; }
+        }
+
+        public string Str
+        {
+            get { return this.ToString(); }
         }
     }
 

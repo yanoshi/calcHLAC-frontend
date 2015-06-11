@@ -18,25 +18,29 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
         public MainWindowViewModel()
         {
             //とりあえずデバッグ用の処理を書いとくよ
+
+            /*
             this.PictureDatas = new ObservableCollection<PictureData>
             {
                 new PictureData(@"C:\git\research_optics\Images\A1confocal_PFC_3nd2_normalized\00041.tif")
                 {
-                    CalcAreas=new List<RectEx>{
+                    CalcAreas=new ObservableCollection<RectEx>{
                         new RectEx{Point=new OpenCvSharp.CPlusPlus.Point(0,0),Size=new OpenCvSharp.CPlusPlus.Size(10,10)},
-                        new RectEx{Point=new OpenCvSharp.CPlusPlus.Point(20,20),Size=new OpenCvSharp.CPlusPlus.Size(10,10)}
+                        new RectEx{Point=new OpenCvSharp.CPlusPlus.Point(100,100),Size=new OpenCvSharp.CPlusPlus.Size(100,200)}
                     }
                 },
                 new PictureData(@"C:\git\research_optics\Images\A1confocal_PFC_3nd2_normalized\00042.tif")
                 {
-                    CalcAreas=new List<RectEx>{
+                    CalcAreas=new ObservableCollection<RectEx>{
                         new RectEx{Point=new OpenCvSharp.CPlusPlus.Point(0,0),Size=new OpenCvSharp.CPlusPlus.Size(10,10)},
                         new RectEx{Point=new OpenCvSharp.CPlusPlus.Point(20,20),Size=new OpenCvSharp.CPlusPlus.Size(10,10)}
                     }
                 }
             };
 
+            */
 
+            this.PictureDatas = new ObservableCollection<PictureData>();
         }
 
 
@@ -93,9 +97,13 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 _PictureDatasSelectedItem = value;
 
                 RaisePropertyChanged("PictureDatasSelectedItem");
+                RaisePropertyChanged("PictureDatasSelectedItemVM");
             }
         }
 
+        /// <summary>
+        /// PictureDatasなリストで選択状態にあるやつのインデックス値を返す
+        /// </summary>
         public int PictureDatasSelectedIndex
         {
             get
@@ -112,7 +120,95 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 }
             }
         }
+
+
+        /// <summary>
+        /// DataContextに指定するためのPictureDatasSelectedItem
+        /// </summary>
+        public AreaSettingCanvesViewModel PictureDatasSelectedItemVM
+        {
+            get
+            {
+                return new AreaSettingCanvesViewModel() { GivenPictureData = PictureDatasSelectedItem };
+            }
+        }
+
+
+        private int _SeparatingValue = 127;
+        /// <summary>
+        /// 二値化用のしきい値
+        /// </summary>
+        public int SeparatingValue
+        {
+            get { return _SeparatingValue; }
+            set
+            {
+                if(_SeparatingValue!=value)
+                {
+                    _SeparatingValue = value;
+
+                    foreach (var obj in PictureDatas)
+                    {
+                        obj.BinaryThreshold = value;
+                    }
+                    RaisePropertyChanged("SeparatingValue");
+                    RaisePropertyChangeForImages();
+                }
+            }
+        }
+
+
+        private bool _IsShowingBinaryPict = false;
+        /// <summary>
+        /// 二値化した画像を表示するかどうか
+        /// </summary>
+        public bool IsShowingBinaryPict
+        {
+            get { return _IsShowingBinaryPict; }
+            set
+            {
+                if(_IsShowingBinaryPict != value)
+                {
+                    _IsShowingBinaryPict = value;
+                    foreach(var obj in PictureDatas)
+                    {
+                        obj.IsBinaryOutputMode = value;
+                    }
+                    RaisePropertyChanged("IsShowingBinaryPict");
+                    RaisePropertyChangeForImages();                   
+                }
+            }
+        }
+
+
+
+        private bool _UsingOtsuMethod = false;
+        /// <summary>
+        /// 大津らの手法を利用して2値化を行うかどうか
+        /// </summary>
+        public bool UsingOtsuMethod
+        {
+            get { return _UsingOtsuMethod; }
+            set
+            {
+                if(_UsingOtsuMethod != value)
+                {
+                    _UsingOtsuMethod = value;
+                    foreach(var obj in PictureDatas)
+                    {
+                        obj.UsingOtsuMethod = value;
+                    }
+                    RaisePropertyChanged("UsingOtsuMethod");
+                    RaisePropertyChangeForImages();
+                }
+            }
+        }
+
         #endregion
+
+
+
+
 
         #region コマンド
 
@@ -144,7 +240,7 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
         #endregion
 
 
-
+        #region PictureDataListItemSelectCommand
         private void PictureDataListItemSelect(object item)
         {
             if (PictureDatasSelectedItem == null)
@@ -174,9 +270,57 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 return _PictureDataListItemSelect;
             }
         }
+        #endregion
 
+
+        #region NextPictureCommand
+        private void NextPicture()
+        {
+            if(this.PictureDatasSelectedIndex - 1 < this.PictureDatas.Count)
+            {
+                this.PictureDatasSelectedIndex++;
+            }
+        }
+        private RelayCommand _NextPicture;
+        public RelayCommand NextPictureCommand
+        {
+            get
+            {
+                if (_NextPicture == null)
+                    _NextPicture = new RelayCommand(NextPicture);
+
+                return _NextPicture;
+            }
+        }
+        #endregion
+
+
+        #region PrevPictureCommand
+        private void PrevPicture()
+        {
+            if (this.PictureDatasSelectedIndex > 0)
+            {
+                this.PictureDatasSelectedIndex--;
+            }
+        }
+        private RelayCommand _PrevPicture;
+        public RelayCommand PrevPictureCommand
+        {
+            get
+            {
+                if (_PrevPicture == null)
+                    _PrevPicture = new RelayCommand(PrevPicture);
+
+                return _PrevPicture;
+            }
+        }
+        #endregion
 
         #endregion
+
+
+
+
 
 
 
@@ -192,8 +336,22 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
             
             foreach(string fileName in files)
             {
-                PictureDatas.Add(new PictureData(fileName));
+                PictureDatas.Add(new PictureData(fileName)
+                    {
+                        UsingOtsuMethod = this.UsingOtsuMethod,
+                        IsBinaryOutputMode = this.IsShowingBinaryPict,
+                        BinaryThreshold = SeparatingValue
+                    });
             }
+        }
+
+        /// <summary>
+        /// どのプロパティに関するRaisePropertyChangeを呼び出せばいいか忘れそうなので
+        /// </summary>
+        private void RaisePropertyChangeForImages()
+        {
+            RaisePropertyChanged("MiniImageSource");
+            RaisePropertyChanged("PictureDatasSelectedItemVM");
         }
         #endregion
     }
