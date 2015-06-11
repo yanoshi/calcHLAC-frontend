@@ -316,6 +316,90 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
         }
         #endregion
 
+
+        #region SaveAllSettingsCommand
+        private void SaveAllSettings()
+        {
+            //設定の保存をするぞい
+            //バイナリも含んでいるので、バイナリシリアル化
+            string fileName;
+
+            using (var diag = new fm.SaveFileDialog())
+            {
+                diag.Filter = "全てのファイル|*";
+                var result = diag.ShowDialog();
+                if (result == fm.DialogResult.OK)
+                    fileName = diag.FileName;
+                else
+                    return;
+            }
+
+            var obj = new SettingsForSave(PictureDatas)
+            {
+                SeparatingValue=this.SeparatingValue,
+                IsShowingBinaryPict=this.IsShowingBinaryPict,
+                UsingOtsuMethod=this.UsingOtsuMethod
+            };
+
+            obj.Save(fileName);
+        }
+        private RelayCommand _SaveAllSettings;
+        public RelayCommand SaveAllSettingsCommand
+        {
+            get
+            {
+                if (_SaveAllSettings == null)
+                    _SaveAllSettings = new RelayCommand(SaveAllSettings);
+
+                return _SaveAllSettings;
+            }
+        }
+        #endregion
+
+
+        #region LoadAllSettingsCommand
+        private void LoadAllSettings()
+        {
+            //設定の読み込みをするぞい
+            string fileName;
+
+            using (var diag = new fm.OpenFileDialog())
+            {
+                diag.Filter = "すべてのファイル|*";
+                var result = diag.ShowDialog();
+                if (result == fm.DialogResult.OK)
+                    fileName = diag.FileName;
+                else
+                    return;
+            }
+
+           
+            this.PictureDatas.Clear();
+            var obj = SettingsForSave.Load(fileName);
+            this.PictureDatas = obj.GetPictureDatas();
+            this.SeparatingValue = obj.SeparatingValue;
+            this.IsShowingBinaryPict = obj.IsShowingBinaryPict;
+            this.UsingOtsuMethod = obj.UsingOtsuMethod;
+
+            this.RaisePropertyChanged("SeparatingValue");
+            this.RaisePropertyChanged("IsShowingBinaryPict");
+            this.RaisePropertyChanged("UsingOtsuMethod");
+            this.RaisePropertyChanged("PictureDatas");
+            this.RaisePropertyChangeForImages();
+        }
+        private RelayCommand _LoadAllSettings;
+        public RelayCommand LoadAllSettingsCommand
+        {
+            get
+            {
+                if (_LoadAllSettings == null)
+                    _LoadAllSettings = new RelayCommand(LoadAllSettings);
+                return _LoadAllSettings;
+            }
+        }
+        #endregion
+        
+
         #endregion
 
 

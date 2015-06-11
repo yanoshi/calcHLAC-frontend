@@ -105,8 +105,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Common\RelayCommand.cs" />
+    <Compile Include="Common\StaticMethods.cs" />
     <Compile Include="Models\PictureData.cs" />
+    <Compile Include="Models\PictureDataBase.cs" />
     <Compile Include="Models\RectEx.cs" />
+    <Compile Include="Models\SettingsForSave.cs" />
     <Compile Include="ViewModels\AreaSettingCanvesViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />

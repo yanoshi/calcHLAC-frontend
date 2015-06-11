@@ -14,8 +14,11 @@ using System.Collections.ObjectModel;
 
 namespace Yanoshi.CalcHLACGUI.Models
 {
-   
-    public class PictureData
+    /// <summary>
+    /// ロードした画像データの管理
+    /// </summary>
+    [Serializable()]
+    public class PictureData : PictureDataBase
     {
         #region コンストラクタとか
         public PictureData(String fileName)
@@ -50,13 +53,7 @@ namespace Yanoshi.CalcHLACGUI.Models
 
 
         #region プロパティ
-        /// <summary>
-        /// HLAC演算座標を指定する
-        /// </summary>
-        public ObservableCollection<RectEx> CalcAreas { get; set; }
-
-        public Mat Image { get; private set; }
-
+        
         public System.Drawing.Bitmap MiniBitmap
         {
             get
@@ -103,15 +100,6 @@ namespace Yanoshi.CalcHLACGUI.Models
             }
         }
 
-        public String FileName { get; private set; }
-
-        public bool IsSeleced { get; set; }
-
-        public bool IsBinaryOutputMode { get; set; }
-
-        public int BinaryThreshold { get; set; }
-
-        public bool UsingOtsuMethod { get; set; }
         #endregion
 
 
@@ -164,5 +152,7 @@ namespace Yanoshi.CalcHLACGUI.Models
 
         
         #endregion
+
+
     }
 }

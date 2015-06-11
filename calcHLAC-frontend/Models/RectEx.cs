@@ -11,6 +11,7 @@ namespace Yanoshi.CalcHLACGUI.Models
     /// <summary>
     /// 領域情報を適当に扱うための構造体
     /// </summary>
+    [Serializable()]
     public class RectEx
     {
         #region メンバ変数
