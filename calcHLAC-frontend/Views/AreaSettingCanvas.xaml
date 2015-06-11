@@ -7,17 +7,12 @@
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-
-   
-
+    
     <UserControl.DataContext>
         <viewModels:AreaSettingCanvesViewModel />
     </UserControl.DataContext>
 
-
-
-
-    <Grid Name="motherGrid" Width="{Binding GivenPictureData.Image.Width}" Height="{Binding GivenPictureData.Image.Height}" MouseUp="grid_MouseUp" MouseMove="grid_MouseMove" MouseDown="grid_MouseDown">
+    <Grid Name="motherGrid" Width="{Binding GivenPictureData.Image.Width}" Height="{Binding GivenPictureData.Image.Height}" MouseUp="grid_MouseUp" MouseMove="grid_MouseMove" MouseDown="grid_MouseDown" >
         
         <Image Source="{Binding GivenPictureData.ImageSource}" Width="{Binding GivenPictureData.Image.Width}" />
 
@@ -31,12 +26,12 @@
                 <Style TargetType="ContentPresenter">
                     <Setter Property="Canvas.Left" Value="{Binding Path=X}" />
                     <Setter Property="Canvas.Top" Value="{Binding Path=Y}" />
-                    <Setter Property="Opacity" Value="0.2" />
+                    <Setter Property="Opacity" Value="0.4" />
                     
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
                             <Trigger.Setters>
-                                <Setter Property="Opacity" Value="0.5" />
+                                <Setter Property="Opacity" Value="0.6" />
                             </Trigger.Setters>
                         </Trigger>                        
                     </Style.Triggers>
@@ -53,7 +48,7 @@
             <Canvas.Resources>
                 <Style TargetType="Rectangle">
                     <Setter Property="Fill" Value="{x:Static SystemColors.ControlDarkBrush}" />
-                    <Setter Property="Opacity" Value="0.5" />
+                    <Setter Property="Opacity" Value="0.6" />
                 </Style>
             </Canvas.Resources>
         </Canvas>

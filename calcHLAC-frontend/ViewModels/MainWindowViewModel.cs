@@ -269,6 +269,26 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
         }
         #endregion
 
+
+        #region Scale
+        private double _Scale = 1.0;
+        /// <summary>
+        /// 画像表示の倍率を指定
+        /// </summary>
+        public double Scale
+        {
+            get { return _Scale; }
+            set
+            {
+                if (_Scale != value)
+                {
+                    _Scale = value;
+                    RaisePropertyChanged("Scale");
+                }
+            }
+        }
+        #endregion
+
         #endregion
 
 

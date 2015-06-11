@@ -27,7 +27,15 @@
         </Grid.RowDefinitions>
 
         <ContentControl Grid.Column="0">
-            <views:AreaSettingCanvas DataContext="{Binding PictureDatasSelectedItemVM}" />
+            <views:AreaSettingCanvas DataContext="{Binding PictureDatasSelectedItemVM}">
+                <views:AreaSettingCanvas.LayoutTransform>
+                    <ScaleTransform 
+                        ScaleX="{Binding Source={StaticResource ParentViewModel}, Path=Scale}" 
+                        ScaleY="{Binding Source={StaticResource ParentViewModel}, Path=Scale}" 
+                        CenterX="{Binding Source={StaticResource ParentViewModel}, Path=Scale}" 
+                        CenterY="{Binding Source={StaticResource ParentViewModel}, Path=Scale}" />
+                </views:AreaSettingCanvas.LayoutTransform>
+            </views:AreaSettingCanvas>
         </ContentControl>
         
         <GridSplitter 
@@ -51,7 +59,13 @@
                         <Slider Value="{Binding SeparatingValue}" Maximum="255" Minimum="0" />
                     </DockPanel>
 
-                    <DockPanel>
+                    <DockPanel Margin="5">
+                        <Label DockPanel.Dock="Left">倍率</Label>
+                        <TextBox DockPanel.Dock="Right" Width="30px" Text="{Binding Scale}" />
+                        <Slider Value="{Binding Scale}" Maximum="3.0" Minimum="0.0" />
+                    </DockPanel>
+
+                    <DockPanel>                        
                         <CheckBox IsChecked="{Binding UsingOtsuMethod}">
                             <TextBlock>大津らの手法を利用してグレースケールかする(しきい値は無効化)</TextBlock>
                         </CheckBox>
