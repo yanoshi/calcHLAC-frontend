@@ -334,18 +334,14 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                     return;
             }
 
-
-            List<PictureDataBase> pictListForSave = new List<PictureDataBase>();
-
-            foreach(var obj in PictureDatas)
+            var obj = new SettingsForSave(PictureDatas)
             {
-                PictureDataBase saveObj = (PictureDataBase)obj;
-                saveObj.RunSettingForSaving();
-                pictListForSave.Add(saveObj);
-            }
+                SeparatingValue=this.SeparatingValue,
+                IsShowingBinaryPict=this.IsShowingBinaryPict,
+                UsingOtsuMethod=this.UsingOtsuMethod
+            };
 
-            StaticMethods.SaveToBinaryFile(fileName, pictListForSave);
-
+            obj.Save(fileName);
         }
         private RelayCommand _SaveAllSettings;
         public RelayCommand SaveAllSettingsCommand
@@ -377,13 +373,19 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                     return;
             }
 
-            List<PictureDataBase> loadedData = (List<PictureDataBase>)StaticMethods.LoadFromBinaryFile(fileName);
+           
             this.PictureDatas.Clear();
-            foreach(var obj in loadedData)
-            {
-                obj.RubSettingForLoaded();
-                this.PictureDatas.Add((PictureData)obj);
-            }
+            var obj = SettingsForSave.Load(fileName);
+            this.PictureDatas = obj.GetPictureDatas();
+            this.SeparatingValue = obj.SeparatingValue;
+            this.IsShowingBinaryPict = obj.IsShowingBinaryPict;
+            this.UsingOtsuMethod = obj.UsingOtsuMethod;
+
+            this.RaisePropertyChanged("SeparatingValue");
+            this.RaisePropertyChanged("IsShowingBinaryPict");
+            this.RaisePropertyChanged("UsingOtsuMethod");
+            this.RaisePropertyChanged("PictureDatas");
+            this.RaisePropertyChangeForImages();
         }
         private RelayCommand _LoadAllSettings;
         public RelayCommand LoadAllSettingsCommand

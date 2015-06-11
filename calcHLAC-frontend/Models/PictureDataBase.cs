@@ -11,6 +11,9 @@ using System.Collections.ObjectModel;
 
 namespace Yanoshi.CalcHLACGUI.Models
 {
+    /// <summary>
+    /// PictureDataをそのままシリアライズすると、Matが邪魔をするので、保存したいデータのみを集めた基底クラスを作りましたとさ。
+    /// </summary>
     [Serializable()]
     public class PictureDataBase
     {

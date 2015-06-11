@@ -14,6 +14,9 @@ using System.Collections.ObjectModel;
 
 namespace Yanoshi.CalcHLACGUI.Models
 {
+    /// <summary>
+    /// ロードした画像データの管理
+    /// </summary>
     [Serializable()]
     public class PictureData : PictureDataBase
     {
