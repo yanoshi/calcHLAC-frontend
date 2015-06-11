@@ -52,6 +52,12 @@
                     </DockPanel>
 
                     <DockPanel>
+                        <CheckBox IsChecked="{Binding UsingOtsuMethod}">
+                            <TextBlock>大津らの手法を利用してグレースケールかする(しきい値は無効化)</TextBlock>
+                        </CheckBox>
+                    </DockPanel>
+
+                    <DockPanel>
                         <CheckBox IsChecked="{Binding IsShowingBinaryPict}">
                             <TextBlock>二値化した画像を表示する</TextBlock>
                         </CheckBox>

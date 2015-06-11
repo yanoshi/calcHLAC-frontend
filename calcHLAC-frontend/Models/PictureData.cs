@@ -110,6 +110,8 @@ namespace Yanoshi.CalcHLACGUI.Models
         public bool IsBinaryOutputMode { get; set; }
 
         public int BinaryThreshold { get; set; }
+
+        public bool UsingOtsuMethod { get; set; }
         #endregion
 
 
@@ -120,8 +122,9 @@ namespace Yanoshi.CalcHLACGUI.Models
         /// <param name="image">Matオブジェクト</param>
         private void SetImage(Mat image)
         {
-            var obj = new Mat(new Size(image.Width, image.Height), MatType.CV_8UC1);
-            image.ConvertTo(obj, MatType.CV_8UC1);
+            var obj = new Mat();
+
+            Cv2.CvtColor(image, obj, ColorConversion.RgbaToGray);
 
             this.Image = obj;
             image.Dispose();
@@ -145,8 +148,12 @@ namespace Yanoshi.CalcHLACGUI.Models
             if(IsBinaryOutputMode)
             {
                 Mat output = new Mat();
+                
 
-                Cv2.Threshold(this.Image, output, BinaryThreshold, 255, ThresholdType.Binary | ThresholdType.Otsu);
+                if(UsingOtsuMethod)
+                    Cv2.Threshold(this.Image, output, 0, 255, ThresholdType.Binary | ThresholdType.Otsu);
+                else
+                    Cv2.Threshold(this.Image, output, BinaryThreshold, 255, ThresholdType.Binary);
 
                 return output.ToBitmap();
             }

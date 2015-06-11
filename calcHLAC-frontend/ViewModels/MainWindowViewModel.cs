@@ -152,8 +152,7 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                         obj.BinaryThreshold = value;
                     }
                     RaisePropertyChanged("SeparatingValue");
-                    RaisePropertyChanged("MiniImageSource");
-                    RaisePropertyChanged("PictureDatasSelectedItemVM");
+                    RaisePropertyChangeForImages();
                 }
             }
         }
@@ -176,12 +175,35 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                         obj.IsBinaryOutputMode = value;
                     }
                     RaisePropertyChanged("IsShowingBinaryPict");
-
-                    RaisePropertyChanged("MiniImageSource");
-                    RaisePropertyChanged("PictureDatasSelectedItemVM");
+                    RaisePropertyChangeForImages();                   
                 }
             }
         }
+
+
+
+        private bool _UsingOtsuMethod = false;
+        /// <summary>
+        /// 大津らの手法を利用して2値化を行うかどうか
+        /// </summary>
+        public bool UsingOtsuMethod
+        {
+            get { return _UsingOtsuMethod; }
+            set
+            {
+                if(_UsingOtsuMethod != value)
+                {
+                    _UsingOtsuMethod = value;
+                    foreach(var obj in PictureDatas)
+                    {
+                        obj.UsingOtsuMethod = value;
+                    }
+                    RaisePropertyChanged("UsingOtsuMethod");
+                    RaisePropertyChangeForImages();
+                }
+            }
+        }
+
         #endregion
 
 
@@ -314,8 +336,22 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
             
             foreach(string fileName in files)
             {
-                PictureDatas.Add(new PictureData(fileName));
+                PictureDatas.Add(new PictureData(fileName)
+                    {
+                        UsingOtsuMethod = this.UsingOtsuMethod,
+                        IsBinaryOutputMode = this.IsShowingBinaryPict,
+                        BinaryThreshold = SeparatingValue
+                    });
             }
+        }
+
+        /// <summary>
+        /// どのプロパティに関するRaisePropertyChangeを呼び出せばいいか忘れそうなので
+        /// </summary>
+        private void RaisePropertyChangeForImages()
+        {
+            RaisePropertyChanged("MiniImageSource");
+            RaisePropertyChanged("PictureDatasSelectedItemVM");
         }
         #endregion
     }
