@@ -21,7 +21,7 @@ namespace Yanoshi.CalcHLACGUI.Common
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        public static object LoadFromBinaryFile(string fileName, object targetObject)
+        public static object LoadFromBinaryFile(string fileName)
         {
             FileStream fs = new FileStream(fileName,
                FileMode.Open,

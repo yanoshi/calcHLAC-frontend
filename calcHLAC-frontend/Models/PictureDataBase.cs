@@ -54,6 +54,10 @@ namespace Yanoshi.CalcHLACGUI.Models
             ImageForSave = Image.ToBitmap();
         }
 
+        virtual public void RubSettingForLoaded()
+        {
+            this.Image = ImageForSave.ToMat();
+        }
         #endregion
     }
 }

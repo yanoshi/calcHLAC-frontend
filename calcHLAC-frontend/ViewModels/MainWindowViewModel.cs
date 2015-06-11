@@ -360,6 +360,44 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
         }
         #endregion
 
+
+        #region LoadAllSettingsCommand
+        private void LoadAllSettings()
+        {
+            //設定の読み込みをするぞい
+            string fileName;
+
+            using (var diag = new fm.OpenFileDialog())
+            {
+                diag.Filter = "すべてのファイル|*";
+                var result = diag.ShowDialog();
+                if (result == fm.DialogResult.OK)
+                    fileName = diag.FileName;
+                else
+                    return;
+            }
+
+            List<PictureDataBase> loadedData = (List<PictureDataBase>)StaticMethods.LoadFromBinaryFile(fileName);
+            this.PictureDatas.Clear();
+            foreach(var obj in loadedData)
+            {
+                obj.RubSettingForLoaded();
+                this.PictureDatas.Add((PictureData)obj);
+            }
+        }
+        private RelayCommand _LoadAllSettings;
+        public RelayCommand LoadAllSettingsCommand
+        {
+            get
+            {
+                if (_LoadAllSettings == null)
+                    _LoadAllSettings = new RelayCommand(LoadAllSettings);
+                return _LoadAllSettings;
+            }
+        }
+        #endregion
+        
+
         #endregion
 
 

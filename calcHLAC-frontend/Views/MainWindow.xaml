@@ -65,7 +65,7 @@
 
                     <Button DockPanel.Dock="Bottom" Margin="5 10 5 0">Calc</Button>
 
-                    <Button DockPanel.Dock="Bottom" Margin="5 10 5 0">Load</Button>
+                    <Button DockPanel.Dock="Bottom" Margin="5 10 5 0" Command="{Binding LoadAllSettingsCommand}">Load</Button>
 
                     <Button DockPanel.Dock="Bottom" Margin="5 10 5 0" Command="{Binding SaveAllSettingsCommand}">SaveSetting</Button>
 
