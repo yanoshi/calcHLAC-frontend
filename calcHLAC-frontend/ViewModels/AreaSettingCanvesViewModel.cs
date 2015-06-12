@@ -32,8 +32,27 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
 
         #region プロパティ
 
+        #region Scale
+        private double _Scale = 1.0;
+        public double Scale
+        {
+            get { return _Scale; }
+            set
+            {
+                if(_Scale!=value)
+                {
+                    _Scale = value;
+                    RaisePropertyChanged("Scale");
+                }
+            }
+        }
+        #endregion
+
+
         public double MouseX { get; set; }
         public double MouseY { get; set; }
+
+        #region IsMouseDown
         private bool _IsMouseDown = false;
         public bool IsMouseDown 
         { 
@@ -53,8 +72,10 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 }
             }
         }
+        #endregion
 
 
+        #region GivenPictureData
         private PictureData _GivenPictureData;
         public PictureData GivenPictureData
         {
@@ -71,9 +92,10 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 }
             }
         }
+        #endregion
 
 
-
+        #region RectList
         private List<Rectangle> _RectList = new List<Rectangle>();
         public List<Rectangle> RectList
         {
@@ -86,8 +108,10 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 _RectList = value;
             }
         }
+        #endregion
 
 
+        #region RefreshAreaList
         /// <summary>
         /// RectListの内容をGivenPictureDataに反映させるメソッド
         /// </summary>
@@ -121,6 +145,7 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
             RaisePropertyChanged("CalcAreas");
         }
         #endregion
- 
+        #endregion
+
     }
 }
