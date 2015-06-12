@@ -35,7 +35,8 @@ namespace Yanoshi.CalcHLACGUI.Views
 
 
         #region Binding可能なScaleプロパティ
-        // 1. 依存プロパティの作成
+        private ScaleTransform scaleTransform = new ScaleTransform(1.0d, 1.0d);
+
         public static readonly DependencyProperty ScaleProperty =
             DependencyProperty.Register("Scale",
                                         typeof(double),
@@ -47,24 +48,17 @@ namespace Yanoshi.CalcHLACGUI.Views
                                             {
                                                 // プロパティ変更時の処理
                                                 // 新しい値をリソースのScaleTransformにセットする
-                                                ((AreaSettingCanvesViewModel)(d as AreaSettingCanvas).DataContext).Scale = (double)e.NewValue;
+                                                (d as AreaSettingCanvas).scaleTransform.ScaleX = (double)e.NewValue;
+                                                (d as AreaSettingCanvas).scaleTransform.ScaleY = (double)e.NewValue;
                                             }));
 
-        // 2. CLI用プロパティを提供するラッパー
         public double Scale
         {
             get { return (double)GetValue(ScaleProperty); }
-            set { SetValue(ScaleProperty, value); }
-        }
-
-        // 3. 依存プロパティが変更されたとき呼ばれるコールバック関数の定義
-        private static void OnTitleChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
-        {
-            // オブジェクトを取得して処理する
-            AreaSettingCanvas ctrl = obj as AreaSettingCanvas;
-            if (ctrl != null)
+            set
             {
-                ((AreaSettingCanvesViewModel)ctrl.DataContext).Scale = ctrl.Scale;
+                SetValue(ScaleProperty, value);
+                motherGrid.LayoutTransform = scaleTransform;
             }
         }
 
@@ -285,6 +279,9 @@ namespace Yanoshi.CalcHLACGUI.Views
         #endregion
 
 
+
+
+        #region スクロール実装用のイベント
         /*
          * この辺を参考に書いたよ☆
          * https://social.msdn.microsoft.com/Forums/ja-JP/1491fe0d-55b3-4e50-9171-7f834bac87fe?forum=wpfja
@@ -300,20 +297,7 @@ namespace Yanoshi.CalcHLACGUI.Views
         /// <param name="e"></param>
         private void ScrollViewer_MouseMove(object sender, MouseEventArgs e)
         {
-            startPoint = e.GetPosition((ScrollViewer)sender);
-
-            ScrollViewer scrollViewer = (ScrollViewer)sender;
-            startPosition = new Point(scrollViewer.HorizontalOffset, scrollViewer.VerticalOffset);
-        }
-
-        /// <summary>
-        /// スクロールな実装(PreviewMouseRightButtonDown)
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ScrollViewer_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if(e.RightButton==MouseButtonState.Pressed)
+            if (e.RightButton == MouseButtonState.Pressed)
             {
                 ScrollViewer scrollViewer = (ScrollViewer)sender;
                 Point point = e.GetPosition((ScrollViewer)sender);
@@ -323,11 +307,30 @@ namespace Yanoshi.CalcHLACGUI.Views
                 }
                 else if (scrollViewer.PanningMode == PanningMode.HorizontalFirst | scrollViewer.PanningMode == PanningMode.HorizontalOnly)
                 {
-                    scrollViewer.ScrollToVerticalOffset(startPosition.X + (point.X - startPoint.X) * -1);
+                    scrollViewer.ScrollToHorizontalOffset(startPosition.X + (point.X - startPoint.X) * -1);
+                }
+                else
+                {
+                    scrollViewer.ScrollToVerticalOffset(startPosition.Y + (point.Y - startPoint.Y) * -1);
+                    scrollViewer.ScrollToHorizontalOffset(startPosition.X + (point.X - startPoint.X) * -1);
                 }
             }
         }
 
+        /// <summary>
+        /// スクロールな実装(PreviewMouseRightButtonDown)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ScrollViewer_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            
+            startPoint = e.GetPosition((ScrollViewer)sender);
+
+            ScrollViewer scrollViewer = (ScrollViewer)sender;
+            startPosition = new Point(scrollViewer.HorizontalOffset, scrollViewer.VerticalOffset);
+        }
+        #endregion
 
         #endregion
 

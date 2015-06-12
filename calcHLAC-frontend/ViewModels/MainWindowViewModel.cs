@@ -365,6 +365,7 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
             {
                 this.PictureDatasSelectedIndex++;
                 RaisePropertyChanged("PictureDatasSelectedIndex");
+                RaisePropertyChanged("Scale");
             }
         }
         private RelayCommand _NextPicture;
@@ -388,6 +389,7 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
             {
                 this.PictureDatasSelectedIndex--;
                 RaisePropertyChanged("PictureDatasSelectedIndex");
+                RaisePropertyChanged("Scale");
             }
         }
         private RelayCommand _PrevPicture;
@@ -588,6 +590,7 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
         {
             RaisePropertyChanged("MiniImageSource");
             RaisePropertyChanged("PictureDatasSelectedItemVM");
+            RaisePropertyChanged("Scale");
         }
         #endregion
     }

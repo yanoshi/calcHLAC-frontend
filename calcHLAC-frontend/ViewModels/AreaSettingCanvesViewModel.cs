@@ -32,22 +32,6 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
 
         #region プロパティ
 
-        #region Scale
-        private double _Scale = 1.0;
-        public double Scale
-        {
-            get { return _Scale; }
-            set
-            {
-                if(_Scale!=value)
-                {
-                    _Scale = value;
-                    RaisePropertyChanged("Scale");
-                }
-            }
-        }
-        #endregion
-
 
         public double MouseX { get; set; }
         public double MouseY { get; set; }
