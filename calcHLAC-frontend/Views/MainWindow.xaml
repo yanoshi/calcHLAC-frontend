@@ -27,15 +27,17 @@
         </Grid.RowDefinitions>
 
         <ContentControl Grid.Column="0">
-            <views:AreaSettingCanvas DataContext="{Binding PictureDatasSelectedItemVM}">
-                <views:AreaSettingCanvas.LayoutTransform>
-                    <ScaleTransform 
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <views:AreaSettingCanvas DataContext="{Binding PictureDatasSelectedItemVM}">
+                    <views:AreaSettingCanvas.LayoutTransform>
+                        <ScaleTransform 
                         ScaleX="{Binding Source={StaticResource ParentViewModel}, Path=Scale}" 
                         ScaleY="{Binding Source={StaticResource ParentViewModel}, Path=Scale}" 
                         CenterX="{Binding Source={StaticResource ParentViewModel}, Path=Scale}" 
                         CenterY="{Binding Source={StaticResource ParentViewModel}, Path=Scale}" />
-                </views:AreaSettingCanvas.LayoutTransform>
-            </views:AreaSettingCanvas>
+                    </views:AreaSettingCanvas.LayoutTransform>
+                </views:AreaSettingCanvas>
+            </ScrollViewer>
         </ContentControl>
         
         <GridSplitter 
@@ -47,6 +49,21 @@
         <ContentControl Grid.Column="2">
             <DockPanel>                
                 <StackPanel DockPanel.Dock="Top" Margin="5 5 5 10">
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Command="{Binding PrevPictureCommand}" Grid.Column="0">Prev</Button>
+                        <WrapPanel Grid.Column="1" HorizontalAlignment="Center">
+                            <TextBlock Text="{Binding PictureDatasSelectedIndex}" />
+                            <TextBlock>/</TextBlock>
+                            <TextBlock Text="{Binding PictureDatas.Count}" />
+                        </WrapPanel>
+                        <Button Command="{Binding NextPictureCommand}" Grid.Column="2">Next</Button>
+                    </Grid>
+                    
                     <DockPanel Margin="5">
                         <Label DockPanel.Dock="Left">フォルダ名:</Label>
                         <Button DockPanel.Dock="Right" Width="30px" Command="{Binding FolderSelectionDialogCommand}">開く</Button>
@@ -82,6 +99,8 @@
                     <Button DockPanel.Dock="Bottom" Margin="5 10 5 0" Command="{Binding SaveAllSettingsCommand}">SaveSetting</Button>
 
                     <Button DockPanel.Dock="Bottom" Margin="5 10 5 0">SaveAreaInfomation</Button>
+
+                    <Button DockPanel.Dock="Bottom" Margin="5 10 5 0" Command="{Binding CallGCCommand}">GCCommand</Button>
 
                     <DockPanel Margin="5 5 5 0">
                         <Label DockPanel.Dock="Left">StepSize(カンマ区切り):</Label>

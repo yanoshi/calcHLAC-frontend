@@ -91,7 +91,6 @@ namespace Yanoshi.CalcHLACGUI.Models
             {
                 var bmp = GetBitmap();
 
-                GC.Collect();
 
                 return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
                     bmp.GetHbitmap(),

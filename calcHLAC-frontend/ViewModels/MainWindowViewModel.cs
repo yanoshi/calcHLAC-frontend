@@ -364,6 +364,7 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
             if(this.PictureDatasSelectedIndex - 1 < this.PictureDatas.Count)
             {
                 this.PictureDatasSelectedIndex++;
+                RaisePropertyChanged("PictureDatasSelectedIndex");
             }
         }
         private RelayCommand _NextPicture;
@@ -386,6 +387,7 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
             if (this.PictureDatasSelectedIndex > 0)
             {
                 this.PictureDatasSelectedIndex--;
+                RaisePropertyChanged("PictureDatasSelectedIndex");
             }
         }
         private RelayCommand _PrevPicture;
@@ -530,6 +532,25 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
             }
         }
         #endregion
+
+
+        #region CallGCCommand
+        private void CallGC()
+        {
+            GC.Collect();
+        }
+        private RelayCommand _CallGC;
+        public RelayCommand CallGCCommand
+        {
+            get
+            {
+                if (_CallGC == null)
+                    _CallGC = new RelayCommand(CallGC);
+                return _CallGC;
+            }
+        }
+        #endregion
+
 
         #endregion
 
