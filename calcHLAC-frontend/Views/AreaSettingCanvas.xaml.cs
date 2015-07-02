@@ -26,11 +26,43 @@ namespace Yanoshi.CalcHLACGUI.Views
         public AreaSettingCanvas()
         {
             InitializeComponent();
+            Scale = 1.0;
         }
 
 
         private List<Rectangle> rectList = new List<Rectangle>();
 
+
+
+        #region Binding可能なScaleプロパティ
+        private ScaleTransform scaleTransform = new ScaleTransform(1.0d, 1.0d);
+
+        public static readonly DependencyProperty ScaleProperty =
+            DependencyProperty.Register("Scale",
+                                        typeof(double),
+                                        typeof(AreaSettingCanvas),
+                                        new UIPropertyMetadata(
+                                            1.0d,
+                                            // PropertyChangedCallback
+                                            (d, e) =>
+                                            {
+                                                // プロパティ変更時の処理
+                                                // 新しい値をリソースのScaleTransformにセットする
+                                                (d as AreaSettingCanvas).scaleTransform.ScaleX = (double)e.NewValue;
+                                                (d as AreaSettingCanvas).scaleTransform.ScaleY = (double)e.NewValue;
+                                            }));
+
+        public double Scale
+        {
+            get { return (double)GetValue(ScaleProperty); }
+            set
+            {
+                SetValue(ScaleProperty, value);
+                motherGrid.LayoutTransform = scaleTransform;
+            }
+        }
+
+        #endregion
 
 
         #region メソッド
@@ -62,7 +94,7 @@ namespace Yanoshi.CalcHLACGUI.Views
 
 
 
-        #region 領域上でのマウス関連イベント
+        #region 選択領域上でのマウス関連イベント
         private bool inDrag = false;
         private double diffX;
         private double diffY;
@@ -71,6 +103,11 @@ namespace Yanoshi.CalcHLACGUI.Views
         private Rectangle nowMovingObj;
         private void rectangle_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (e.ChangedButton == MouseButton.Right)
+            {
+                //右クリックされた時は、領域お絵かきではなくスクロール
+                return;
+            }
             if(e.ClickCount == 2)
             {
                 Delete();
@@ -121,6 +158,11 @@ namespace Yanoshi.CalcHLACGUI.Views
         }
         private void rectangle_MouseUp(object sender, MouseButtonEventArgs e)
         {
+            if (e.ChangedButton == MouseButton.Right)
+            {
+                //右クリックされた時は、領域お絵かきではなくスクロール
+                return;
+            }
             inDrag = false;
             ((Rectangle)sender).ReleaseMouseCapture();
 
@@ -148,6 +190,11 @@ namespace Yanoshi.CalcHLACGUI.Views
         private double startX = 0, startY = 0;
         private void grid_MouseUp(object sender, MouseButtonEventArgs e)
         {
+            if (e.ChangedButton == MouseButton.Right)
+            {
+                //右クリックされた時は、領域お絵かきではなくスクロール
+                return;
+            }
             var obj = ((AreaSettingCanvesViewModel)this.DataContext);
             obj.IsMouseDown = false;
 
@@ -197,6 +244,13 @@ namespace Yanoshi.CalcHLACGUI.Views
 
         private void grid_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if(e.ChangedButton==MouseButton.Right)
+            {
+                //右クリックされた時は、領域お絵かきではなくスクロール
+                return;
+            }
+            
+
             var obj = ((AreaSettingCanvesViewModel)this.DataContext); 
             obj.IsMouseDown = true;
 
@@ -224,8 +278,60 @@ namespace Yanoshi.CalcHLACGUI.Views
         }
         #endregion
 
+
+
+        #region スクロール実装用のイベント
+        /*
+         * この辺を参考に書いたよ☆
+         * https://social.msdn.microsoft.com/Forums/ja-JP/1491fe0d-55b3-4e50-9171-7f834bac87fe?forum=wpfja
+         */
+
+        Point startPoint;
+        Point startPosition;
+
+        /// <summary>
+        /// スクロールな実装(MouseMove)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ScrollViewer_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.RightButton == MouseButtonState.Pressed)
+            {
+                ScrollViewer scrollViewer = (ScrollViewer)sender;
+                Point point = e.GetPosition((ScrollViewer)sender);
+                if (scrollViewer.PanningMode == PanningMode.VerticalFirst | scrollViewer.PanningMode == PanningMode.VerticalOnly)
+                {
+                    scrollViewer.ScrollToVerticalOffset(startPosition.Y + (point.Y - startPoint.Y) * -1);
+                }
+                else if (scrollViewer.PanningMode == PanningMode.HorizontalFirst | scrollViewer.PanningMode == PanningMode.HorizontalOnly)
+                {
+                    scrollViewer.ScrollToHorizontalOffset(startPosition.X + (point.X - startPoint.X) * -1);
+                }
+                else
+                {
+                    scrollViewer.ScrollToVerticalOffset(startPosition.Y + (point.Y - startPoint.Y) * -1);
+                    scrollViewer.ScrollToHorizontalOffset(startPosition.X + (point.X - startPoint.X) * -1);
+                }
+            }
+        }
+
+        /// <summary>
+        /// スクロールな実装(PreviewMouseRightButtonDown)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ScrollViewer_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            
+            startPoint = e.GetPosition((ScrollViewer)sender);
+
+            ScrollViewer scrollViewer = (ScrollViewer)sender;
+            startPosition = new Point(scrollViewer.HorizontalOffset, scrollViewer.VerticalOffset);
+        }
         #endregion
 
+        #endregion
 
     }
 }

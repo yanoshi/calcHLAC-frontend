@@ -15,12 +15,16 @@ using System.Collections.ObjectModel;
 namespace Yanoshi.CalcHLACGUI.Models
 {
     /// <summary>
-    /// ロードした画像データの管理
+    /// 画像データの管理用クラス
     /// </summary>
     [Serializable()]
     public class PictureData : PictureDataBase
     {
         #region コンストラクタとか
+        /// <summary>
+        /// ファイルから初期化
+        /// </summary>
+        /// <param name="fileName"></param>
         public PictureData(String fileName)
         {
             Mat obj = new Mat(fileName);
@@ -29,6 +33,11 @@ namespace Yanoshi.CalcHLACGUI.Models
             FileName=fileName;
         }
 
+
+        /// <summary>
+        /// Matオブジェクトから初期化
+        /// </summary>
+        /// <param name="matObj"></param>
         public PictureData(Mat matObj)
         {
             Init();
@@ -45,7 +54,7 @@ namespace Yanoshi.CalcHLACGUI.Models
         private void Init()
         {
             CalcAreas = new ObservableCollection<RectEx>();
-            IsSeleced = false;
+            IsSelected = false;
             IsBinaryOutputMode = false;
         }
 
@@ -54,49 +63,65 @@ namespace Yanoshi.CalcHLACGUI.Models
 
         #region プロパティ
         
+        /// <summary>
+        /// 縮小されたBitmapを返します
+        /// </summary>
         public System.Drawing.Bitmap MiniBitmap
         {
             get
             {
-                var image = GetBitmap();
-                int w = 100;
-                int h = (int)((double)image.Height / ((double)image.Width / (double)w));
+                using (var image = GetBitmap())
+                {
+                    int w = 100;
+                    int h = (int)((double)image.Height / ((double)image.Width / (double)w));
 
-                var miniBmp = new System.Drawing.Bitmap(image, new System.Drawing.Size(w, h));
-                image.Dispose();
+                    var miniBmp = new System.Drawing.Bitmap(image, new System.Drawing.Size(w, h));
+                    image.Dispose();
 
-                return miniBmp;
+                    return miniBmp;
+                }
             }
         }
 
+
+        /// <summary>
+        /// 縮小されたBitmapから作ったBitmapSourceオブジェクトを返します
+        /// </summary>
         public object MiniImageSource
         {
             get
             {
-                var bmp = MiniBitmap;
+                using (var bmp = MiniBitmap)
+                {
 
-
-                return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                    bmp.GetHbitmap(),
-                    IntPtr.Zero,
-                    System.Windows.Int32Rect.Empty,
-                    BitmapSizeOptions.FromWidthAndHeight(bmp.Width, bmp.Height));
+                    return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                        bmp.GetHbitmap(),
+                        IntPtr.Zero,
+                        System.Windows.Int32Rect.Empty,
+                        BitmapSizeOptions.FromWidthAndHeight(bmp.Width, bmp.Height));
+                }
             }
         }
 
 
+        /// <summary>
+        /// MatオブジェクトからBitmapSourceオブジェクトを作って返す
+        /// </summary>
         public object ImageSource
         {
             get
             {
-                var bmp = GetBitmap();
+                using(var output = new Mat())    
+                { 
+
+                    if (UsingOtsuMethod)
+                        Cv2.Threshold(this.Image, output, 0, 255, ThresholdType.Binary | ThresholdType.Otsu);
+                    else
+                        Cv2.Threshold(this.Image, output, BinaryThreshold, 255, ThresholdType.Binary);
 
 
-                return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                    bmp.GetHbitmap(),
-                    IntPtr.Zero,
-                    System.Windows.Int32Rect.Empty,
-                    BitmapSizeOptions.FromWidthAndHeight(bmp.Width, bmp.Height));
+                    return output.ToBitmapSource();
+                }
             }
         }
 
@@ -110,12 +135,12 @@ namespace Yanoshi.CalcHLACGUI.Models
         /// <param name="image">Matオブジェクト</param>
         private void SetImage(Mat image)
         {
-            var obj = new Mat();
+            using (var obj = new Mat())
+            {
+                Cv2.CvtColor(image, obj, ColorConversion.RgbaToGray);
 
-            Cv2.CvtColor(image, obj, ColorConversion.RgbaToGray);
-
-            this.Image = obj;
-            image.Dispose();
+                this.Image = obj;
+            }
         }
 
         /// <summary>
@@ -135,24 +160,38 @@ namespace Yanoshi.CalcHLACGUI.Models
         {
             if(IsBinaryOutputMode)
             {
-                Mat output = new Mat();
-                
+                using (var output = new Mat())
+                {
+                    if (UsingOtsuMethod)
+                        Cv2.Threshold(this.Image, output, 0, 255, ThresholdType.Binary | ThresholdType.Otsu);
+                    else
+                        Cv2.Threshold(this.Image, output, BinaryThreshold, 255, ThresholdType.Binary);
 
-                if(UsingOtsuMethod)
-                    Cv2.Threshold(this.Image, output, 0, 255, ThresholdType.Binary | ThresholdType.Otsu);
-                else
-                    Cv2.Threshold(this.Image, output, BinaryThreshold, 255, ThresholdType.Binary);
-
-                return output.ToBitmap();
+                    return output.ToBitmap();
+                }
             }
             else
                 return this.Image.ToBitmap();
         }
 
 
-        
+        /// <summary>
+        /// 二値化したMatを返す
+        /// </summary>
+        /// <returns></returns>
+        public Mat GetBinaryMat()
+        {
+            using (Mat output = new Mat())
+            {
+
+                if (UsingOtsuMethod)
+                    Cv2.Threshold(this.Image, output, 0, 255, ThresholdType.Binary | ThresholdType.Otsu);
+                else
+                    Cv2.Threshold(this.Image, output, BinaryThreshold, 255, ThresholdType.Binary);
+
+                return output;
+            }
+        }
         #endregion
-
-
     }
 }

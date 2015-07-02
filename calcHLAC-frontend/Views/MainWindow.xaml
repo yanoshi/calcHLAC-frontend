@@ -27,7 +27,7 @@
         </Grid.RowDefinitions>
 
         <ContentControl Grid.Column="0">
-            <views:AreaSettingCanvas DataContext="{Binding PictureDatasSelectedItemVM}" />
+            <views:AreaSettingCanvas DataContext="{Binding PictureDatasSelectedItemVM}" Scale="{Binding Source={StaticResource ParentViewModel}, Path=Scale}" />
         </ContentControl>
         
         <GridSplitter 
@@ -39,19 +39,40 @@
         <ContentControl Grid.Column="2">
             <DockPanel>                
                 <StackPanel DockPanel.Dock="Top" Margin="5 5 5 10">
-                    <DockPanel>
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Command="{Binding PrevPictureCommand}" Grid.Column="0">Prev</Button>
+                        <WrapPanel Grid.Column="1" HorizontalAlignment="Center">
+                            <TextBlock Text="{Binding PictureDatasSelectedIndex}" />
+                            <TextBlock>/</TextBlock>
+                            <TextBlock Text="{Binding PictureDatas.Count}" />
+                        </WrapPanel>
+                        <Button Command="{Binding NextPictureCommand}" Grid.Column="2">Next</Button>
+                    </Grid>
+                    
+                    <DockPanel Margin="5">
                         <Label DockPanel.Dock="Left">フォルダ名:</Label>
                         <Button DockPanel.Dock="Right" Width="30px" Command="{Binding FolderSelectionDialogCommand}">開く</Button>
                         <TextBox Text="{Binding PictureFolderPath}" />
                     </DockPanel>
 
-                    <DockPanel>
+                    <DockPanel Margin="5">
                         <Label DockPanel.Dock="Left">2値化しきい値: </Label>
                         <TextBox DockPanel.Dock="Right" Width="30px" Text="{Binding SeparatingValue}" />
                         <Slider Value="{Binding SeparatingValue}" Maximum="255" Minimum="0" />
                     </DockPanel>
 
-                    <DockPanel>
+                    <DockPanel Margin="5">
+                        <Label DockPanel.Dock="Left">倍率</Label>
+                        <TextBox DockPanel.Dock="Right" Width="30px" Text="{Binding Scale}" />
+                        <Slider Value="{Binding Scale}" Maximum="3.0" Minimum="0.0" />
+                    </DockPanel>
+
+                    <DockPanel>                        
                         <CheckBox IsChecked="{Binding UsingOtsuMethod}">
                             <TextBlock>大津らの手法を利用してグレースケールかする(しきい値は無効化)</TextBlock>
                         </CheckBox>
@@ -62,16 +83,23 @@
                             <TextBlock>二値化した画像を表示する</TextBlock>
                         </CheckBox>
                     </DockPanel>
-
-                    <Button DockPanel.Dock="Bottom" Margin="5 10 5 0">Calc</Button>
-
+                                        
                     <Button DockPanel.Dock="Bottom" Margin="5 10 5 0" Command="{Binding LoadAllSettingsCommand}">Load</Button>
 
                     <Button DockPanel.Dock="Bottom" Margin="5 10 5 0" Command="{Binding SaveAllSettingsCommand}">SaveSetting</Button>
 
-                    <Button DockPanel.Dock="Bottom" Margin="5 10 5 0">SaveAreaInfomation</Button>
+                    <Button DockPanel.Dock="Bottom" Margin="5 10 5 0" Command="{Binding SaveAreaInformationCommand}">SaveAreaInfomation</Button>
 
-                    <TextBox DockPanel.Dock="Bottom" Margin="5 10 5 0" Height="100">Memo</TextBox>
+                    <Button DockPanel.Dock="Bottom" Margin="5 10 5 0" Command="{Binding CallGCCommand}">GCCommand</Button>
+
+                    <DockPanel Margin="5 5 5 0">
+                        <Label DockPanel.Dock="Left">StepSize(カンマ区切り):</Label>
+                        <TextBox Text="{Binding StepSizeStr}" />
+                    </DockPanel>
+
+                    <Button DockPanel.Dock="Bottom" Margin="5 10 5 0" Command="{Binding CalcHLACCommand}">Calc</Button>
+
+                    <TextBox DockPanel.Dock="Bottom" Margin="5 10 5 0" Height="100" Text="{Binding Memo}" />
                 </StackPanel>
 
                 <ListBox ItemsSource="{Binding PictureDatas}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"  SelectedItem="{Binding PictureDatasSelectedItem}" >                    

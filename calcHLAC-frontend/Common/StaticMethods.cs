@@ -36,7 +36,7 @@ namespace Yanoshi.CalcHLACGUI.Common
 
 
         /// <summary>
-        /// バイナリファイルに指定されたオブジェクトを保存する
+        /// オブジェクトをバイナリファイルに保存する
         /// </summary>
         /// <param name="fileName"></param>
         /// <param name="obj"></param>
