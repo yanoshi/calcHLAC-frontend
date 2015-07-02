@@ -28,9 +28,15 @@ namespace Yanoshi.CalcHLACGUI
             InitializeComponent();
         }
 
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+       
+        void MyOnMouseWheel(object sender,MouseWheelEventArgs e)
         {
-
+            if ((Keyboard.Modifiers & ModifierKeys.Control) != ModifierKeys.None)
+            {
+                ((MainWindowViewModel)this.DataContext).Scale += e.Delta/1000.0;
+            }
         }
     }
+
+
 }

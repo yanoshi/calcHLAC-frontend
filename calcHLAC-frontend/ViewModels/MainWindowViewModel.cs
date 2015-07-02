@@ -104,6 +104,7 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
 
                 RaisePropertyChanged("PictureDatasSelectedItem");
                 RaisePropertyChanged("PictureDatasSelectedItemVM");
+                RaisePropertyChanged("PictureDatasSelectedIndex");
             }
         }
         #endregion
@@ -280,7 +281,7 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
             get { return _Scale; }
             set
             {
-                if (_Scale != value)
+                if (_Scale != value && value > 0)
                 {
                     _Scale = value;
                     RaisePropertyChanged("Scale");
@@ -360,6 +361,7 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 PictureDatasSelectedItem = ((PictureData)item);
             }
             RaisePropertyChanged("PictureDatasSelectedItem");
+            RaisePropertyChanged("PictureDatasSelectedIndex");
 
         }
         private RelayCommand<object> _PictureDataListItemSelect;

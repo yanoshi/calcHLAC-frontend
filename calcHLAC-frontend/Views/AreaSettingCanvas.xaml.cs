@@ -88,7 +88,6 @@ namespace Yanoshi.CalcHLACGUI.Views
 
 
 
-
         #region イベント
 
 
