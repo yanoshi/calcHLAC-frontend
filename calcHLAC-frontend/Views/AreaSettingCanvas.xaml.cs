@@ -94,7 +94,7 @@ namespace Yanoshi.CalcHLACGUI.Views
 
 
 
-        #region 領域上でのマウス関連イベント
+        #region 選択領域上でのマウス関連イベント
         private bool inDrag = false;
         private double diffX;
         private double diffY;
@@ -277,7 +277,6 @@ namespace Yanoshi.CalcHLACGUI.Views
 
         }
         #endregion
-
 
 
 

@@ -289,6 +289,26 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
         }
         #endregion
 
+
+        #region Memo
+        private string _Memo = "memo";
+        /// <summary>
+        /// メモ書き
+        /// </summary>
+        public string Memo
+        {
+            get { return _Memo; }
+            set
+            {
+                if(_Memo!=value)
+                {
+                    _Memo = value;
+                    RaisePropertyChanged("Memo");
+                }
+            }
+        }
+        #endregion
+
         #endregion
 
 
@@ -331,12 +351,12 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
             if (PictureDatasSelectedItem == null)
             {
                 PictureDatasSelectedItem = ((PictureData)item);
-                PictureDatasSelectedItem.IsSeleced = true;
+                PictureDatasSelectedItem.IsSelected = true;
             }
             else if((PictureData)item != PictureDatasSelectedItem)
             {
-                PictureDatasSelectedItem.IsSeleced = false;
-                ((PictureData)item).IsSeleced = true;
+                PictureDatasSelectedItem.IsSelected = false;
+                ((PictureData)item).IsSelected = true;
                 PictureDatasSelectedItem = ((PictureData)item);
             }
             RaisePropertyChanged("PictureDatasSelectedItem");
@@ -427,7 +447,8 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
             {
                 SeparatingValue=this.SeparatingValue,
                 IsShowingBinaryPict=this.IsShowingBinaryPict,
-                UsingOtsuMethod=this.UsingOtsuMethod
+                UsingOtsuMethod=this.UsingOtsuMethod,
+                Memo=this.Memo
             };
 
             obj.Save(fileName);
@@ -469,11 +490,14 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
             this.SeparatingValue = obj.SeparatingValue;
             this.IsShowingBinaryPict = obj.IsShowingBinaryPict;
             this.UsingOtsuMethod = obj.UsingOtsuMethod;
+            this.Memo = obj.Memo;
+
 
             this.RaisePropertyChanged("SeparatingValue");
             this.RaisePropertyChanged("IsShowingBinaryPict");
             this.RaisePropertyChanged("UsingOtsuMethod");
             this.RaisePropertyChanged("PictureDatas");
+            this.RaisePropertyChanged("Memo");
             this.RaisePropertyChangeForImages();
         }
         private RelayCommand _LoadAllSettings;
@@ -553,6 +577,62 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
         }
         #endregion
 
+
+        #region SaveAreaInformationCommand
+        private void SaveAreaInformation()
+        {
+            StringBuilder strb = new StringBuilder();
+            strb.AppendFormat("{0},{1},{2},{3},{4}\n",
+                "filename",
+                "x",
+                "y",
+                "width",
+                "height");
+
+            foreach(var pict in PictureDatas)
+            {
+                string fileName = pict.FileName;
+
+                foreach(var calcArea in pict.CalcAreas)
+                {
+                    strb.AppendFormat("{0},{1},{2},{3},{4}\n",
+                        fileName,
+                        calcArea.X,
+                        calcArea.Y,
+                        calcArea.Width,
+                        calcArea.Height);
+                }
+            }
+
+
+
+            string saveFileName;
+
+            using (var diag = new fm.SaveFileDialog())
+            {
+                diag.Filter = "CSVファイル|*.csv";
+                var result = diag.ShowDialog();
+                if (result == fm.DialogResult.OK)
+                    saveFileName = diag.FileName;
+                else
+                    return;
+            }
+
+            var stw = new StreamWriter(saveFileName);
+            stw.Write(strb.ToString());
+            stw.Close();
+        }
+        private RelayCommand _SaveAreaInfomation;
+        public RelayCommand SaveAreaInformationCommand
+        {
+            get
+            {
+                if (_SaveAreaInfomation == null)
+                    _SaveAreaInfomation = new RelayCommand(SaveAreaInformation);
+                return _SaveAreaInfomation;
+            }
+        }
+        #endregion
 
         #endregion
 

@@ -88,7 +88,7 @@
 
                     <Button DockPanel.Dock="Bottom" Margin="5 10 5 0" Command="{Binding SaveAllSettingsCommand}">SaveSetting</Button>
 
-                    <Button DockPanel.Dock="Bottom" Margin="5 10 5 0">SaveAreaInfomation</Button>
+                    <Button DockPanel.Dock="Bottom" Margin="5 10 5 0" Command="{Binding SaveAreaInformationCommand}">SaveAreaInfomation</Button>
 
                     <Button DockPanel.Dock="Bottom" Margin="5 10 5 0" Command="{Binding CallGCCommand}">GCCommand</Button>
 
@@ -99,7 +99,7 @@
 
                     <Button DockPanel.Dock="Bottom" Margin="5 10 5 0" Command="{Binding CalcHLACCommand}">Calc</Button>
 
-                    <TextBox DockPanel.Dock="Bottom" Margin="5 10 5 0" Height="100">Memo</TextBox>
+                    <TextBox DockPanel.Dock="Bottom" Margin="5 10 5 0" Height="100" Text="{Binding Memo}" />
                 </StackPanel>
 
                 <ListBox ItemsSource="{Binding PictureDatas}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"  SelectedItem="{Binding PictureDatasSelectedItem}" >                    
