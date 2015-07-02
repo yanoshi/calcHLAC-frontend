@@ -9,11 +9,20 @@
 
     <Window.Resources>
         <viewModels:MainWindowViewModel x:Key="ParentViewModel" />
+
+        <Style x:Key="BaseEvent" TargetType="{x:Type FrameworkElement}">
+            <EventSetter Event="MouseWheel" Handler="MyOnMouseWheel"/>
+        </Style>
+
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource BaseEvent}"/>
+        <Style TargetType="{x:Type Grid}" BasedOn="{StaticResource BaseEvent}"/>
+        <Style TargetType="{x:Type views:AreaSettingCanvas}" BasedOn="{StaticResource BaseEvent}"/>
+        <Style TargetType="{x:Type ListBox}" BasedOn="{StaticResource BaseEvent}"/>
     </Window.Resources>
     
     <Window.InputBindings>
-        <KeyBinding Key="Right" Command="{Binding NextPictureCommand}"/>
-        <KeyBinding Key="Left" Command="{Binding PrevPictureCommand}"/>
+        <KeyBinding Key="J" Command="{Binding NextPictureCommand}" Modifiers="Shift" />
+        <KeyBinding Key="K" Command="{Binding PrevPictureCommand}" Modifiers="Shift" />
     </Window.InputBindings>
 
     <Grid>
