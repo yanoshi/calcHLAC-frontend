@@ -111,9 +111,13 @@ namespace Yanoshi.CalcHLACGUI.Models
         {
             get
             {
+                if (!this.IsBinaryOutputMode)
+                    return this.Image.ToBitmapSource();
+
+
                 using(var output = new Mat())    
                 { 
-
+                   
                     if (UsingOtsuMethod)
                         Cv2.Threshold(this.Image, output, 0, 255, ThresholdType.Binary | ThresholdType.Otsu);
                     else
@@ -135,12 +139,11 @@ namespace Yanoshi.CalcHLACGUI.Models
         /// <param name="image">Matオブジェクト</param>
         private void SetImage(Mat image)
         {
-            using (var obj = new Mat())
-            {
-                Cv2.CvtColor(image, obj, ColorConversion.RgbaToGray);
+            var obj = new Mat();
+            
+            Cv2.CvtColor(image, obj, ColorConversion.RgbaToGray);
 
-                this.Image = obj;
-            }
+            this.Image = obj;
         }
 
         /// <summary>

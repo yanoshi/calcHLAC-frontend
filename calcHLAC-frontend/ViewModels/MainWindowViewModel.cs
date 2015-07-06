@@ -671,6 +671,8 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
         private void RaisePropertyChangeForImages()
         {
             RaisePropertyChanged("MiniImageSource");
+            RaisePropertyChanged("PictureDatasSelectedItem");
+            RaisePropertyChanged("PictureDatasSelectedIndex");
             RaisePropertyChanged("PictureDatasSelectedItemVM");
             RaisePropertyChanged("Scale");
         }
