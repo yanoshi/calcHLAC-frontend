@@ -184,16 +184,14 @@ namespace Yanoshi.CalcHLACGUI.Models
         /// <returns></returns>
         public Mat GetBinaryMat()
         {
-            using (Mat output = new Mat())
-            {
+            Mat output = new Mat();
 
-                if (UsingOtsuMethod)
-                    Cv2.Threshold(this.Image, output, 0, 255, ThresholdType.Binary | ThresholdType.Otsu);
-                else
-                    Cv2.Threshold(this.Image, output, BinaryThreshold, 255, ThresholdType.Binary);
+            if (UsingOtsuMethod)
+                Cv2.Threshold(this.Image, output, 0, 255, ThresholdType.Binary | ThresholdType.Otsu);
+            else
+                Cv2.Threshold(this.Image, output, BinaryThreshold, 255, ThresholdType.Binary);
 
-                return output;
-            }
+            return output;
         }
         #endregion
     }

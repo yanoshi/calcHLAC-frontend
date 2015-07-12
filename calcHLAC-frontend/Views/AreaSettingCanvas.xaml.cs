@@ -165,9 +165,12 @@ namespace Yanoshi.CalcHLACGUI.Views
             inDrag = false;
             ((Rectangle)sender).ReleaseMouseCapture();
 
-            this.mainCanves.Children.Remove(nowMovingObj);
-            nowMovingObj.ReleaseMouseCapture();
-            
+            if (nowMovingObj != null)
+            {
+                this.mainCanves.Children.Remove(nowMovingObj);
+                nowMovingObj.ReleaseMouseCapture();
+            }
+
             var obj = ((AreaSettingCanvesViewModel)this.DataContext);
             int x = (int)Canvas.GetLeft(nowMovingObj);
             int y = (int)Canvas.GetTop(nowMovingObj);
