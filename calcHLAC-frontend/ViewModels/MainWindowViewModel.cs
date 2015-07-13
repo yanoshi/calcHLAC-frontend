@@ -266,7 +266,12 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                     _StepSize = new int[] {1 };
                 return _StepSize;
             }
-            set { _StepSize = value; }
+            set 
+            { 
+                _StepSize = value;
+                _StepSizeStr = string.Join(",", value);
+                RaisePropertyChanged("StepSizeStr");
+            }
         }
         #endregion
 
@@ -450,7 +455,8 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 SeparatingValue=this.SeparatingValue,
                 IsShowingBinaryPict=this.IsShowingBinaryPict,
                 UsingOtsuMethod=this.UsingOtsuMethod,
-                Memo=this.Memo
+                Memo=this.Memo,
+                StepSizes=this.StepSize
             };
 
             obj.Save(fileName);
@@ -493,6 +499,7 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
             this.IsShowingBinaryPict = obj.IsShowingBinaryPict;
             this.UsingOtsuMethod = obj.UsingOtsuMethod;
             this.Memo = obj.Memo;
+            this.StepSize = obj.StepSizes;
 
 
             this.RaisePropertyChanged("SeparatingValue");
