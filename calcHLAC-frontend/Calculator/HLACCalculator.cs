@@ -35,6 +35,20 @@ namespace Yanoshi.CalcHLACGUI.Calculator
                 returnRect.Features.AddRange(CalcFeatures(matObj, start_x, start_y, end_x, end_y, step));
             }
 
+
+            //正規化します
+            double allFeaturesAddition = 0;
+            for (int i = 0; i < returnRect.Features.Count;i++ )
+            {
+                allFeaturesAddition += Math.Pow(returnRect.Features[i], 2.0);
+            }
+            double scalar = Math.Sqrt(allFeaturesAddition);
+            for (int i = 0; i < returnRect.Features.Count; i++)
+            {
+                returnRect.Features[i] /= scalar;
+            }
+
+
             return returnRect;
         }
 
