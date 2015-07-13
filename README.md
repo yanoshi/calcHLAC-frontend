@@ -1,7 +1,9 @@
 # calcHLAC-frontend
 画像の領域を指定してその領域のHLAC特徴量を得るためのGUIソフトウェア
 
-バグあるかも。
+.NET Framework 4.5(C#) + OpenCVSharp で開発
+
+バグあるかも
 
 基本的に私得なツールなので、特に詳しくは書かないですが…
 
