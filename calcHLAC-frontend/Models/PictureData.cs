@@ -111,19 +111,8 @@ namespace Yanoshi.CalcHLACGUI.Models
         {
             get
             {
-                if (!this.IsBinaryOutputMode)
-                    return this.Image.ToBitmapSource();
-
-
-                using(var output = new Mat())    
+                using (var output = GetOutputMat())    
                 { 
-                   
-                    if (UsingOtsuMethod)
-                        Cv2.Threshold(this.Image, output, 0, 255, ThresholdType.Binary | ThresholdType.Otsu);
-                    else
-                        Cv2.Threshold(this.Image, output, BinaryThreshold, 255, ThresholdType.Binary);
-
-
                     return output.ToBitmapSource();
                 }
             }
@@ -160,21 +149,32 @@ namespace Yanoshi.CalcHLACGUI.Models
         /// </summary>
         /// <returns></returns>
         public System.Drawing.Bitmap GetBitmap()
-        {
-            if(IsBinaryOutputMode)
+        {  
+            using(var returnData = GetOutputMat())
             {
-                using (var output = new Mat())
-                {
-                    if (UsingOtsuMethod)
-                        Cv2.Threshold(this.Image, output, 0, 255, ThresholdType.Binary | ThresholdType.Otsu);
-                    else
-                        Cv2.Threshold(this.Image, output, BinaryThreshold, 255, ThresholdType.Binary);
-
-                    return output.ToBitmap();
-                }
+                return returnData.ToBitmap();
             }
-            else
-                return this.Image.ToBitmap();
+        }
+
+
+        private Mat GetOutputMat()
+        {
+            var output =  this.Image.Clone();
+
+
+            if (UsingMedianBlur)
+                output = output.MedianBlur(3);
+
+            if (IsBinaryOutputMode)
+            {
+                if (UsingOtsuMethod)
+                    Cv2.Threshold(output, output, 0, 255, ThresholdType.Binary | ThresholdType.Otsu);
+                else
+                    Cv2.Threshold(output, output, BinaryThreshold, 255, ThresholdType.Binary);
+            }
+
+
+            return output;
         }
 
 

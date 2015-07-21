@@ -223,6 +223,30 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
         #endregion
 
 
+        #region UsingMedianBlur
+        private bool _UsingMedianBlur;
+        public bool UsingMedianBlur
+        {
+            get { return _UsingMedianBlur; }
+            set
+            {
+                if(_UsingMedianBlur != value)
+                {
+                    _UsingMedianBlur = value;
+
+                    foreach(var obj in PictureDatas)
+                    {
+                        obj.UsingMedianBlur = value;
+                    }
+
+                    RaisePropertyChangeForImages();
+                    RaisePropertyChanged("UsingMedianBlur");
+                }
+            }
+        }
+        #endregion
+
+
         #region StepSizeStr
         private string _StepSizeStr = "1";
         public string StepSizeStr
@@ -267,7 +291,9 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 return _StepSize;
             }
             set 
-            { 
+            {
+                if (value == null)
+                    value = new int[] { 0 };
                 _StepSize = value;
                 _StepSizeStr = string.Join(",", value);
                 RaisePropertyChanged("StepSizeStr");
@@ -456,7 +482,8 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
                 IsShowingBinaryPict=this.IsShowingBinaryPict,
                 UsingOtsuMethod=this.UsingOtsuMethod,
                 Memo=this.Memo,
-                StepSizes=this.StepSize
+                StepSizes=this.StepSize,
+                UsingMedianBlur=this.UsingMedianBlur
             };
 
             obj.Save(fileName);
@@ -500,7 +527,7 @@ namespace Yanoshi.CalcHLACGUI.ViewModels
             this.UsingOtsuMethod = obj.UsingOtsuMethod;
             this.Memo = obj.Memo;
             this.StepSize = obj.StepSizes;
-
+            this.UsingMedianBlur = obj.UsingMedianBlur;
 
             this.RaisePropertyChanged("SeparatingValue");
             this.RaisePropertyChanged("IsShowingBinaryPict");

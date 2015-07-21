@@ -20,7 +20,7 @@ namespace Yanoshi.CalcHLACGUI.Models
         public bool UsingOtsuMethod { get; set; }
         public int[] StepSizes { get; set; }
         public string Memo { get; set; }
-        
+        public bool UsingMedianBlur { get; set; }
 
 
         public SettingsForSave(ObservableCollection<PictureData> pictureDatas)

@@ -58,6 +58,11 @@ namespace Yanoshi.CalcHLACGUI.Models
         public bool UsingOtsuMethod { get; set; }
 
         /// <summary>
+        /// メディアンフィルタを利用するかどうか
+        /// </summary>
+        public bool UsingMedianBlur { get; set; }
+
+        /// <summary>
         /// 保存用のオブジェクト(継承されてほしくなかったのでvirtual)
         /// </summary>
         virtual public Bitmap ImageForSave { get; set; }
